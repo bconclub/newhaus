@@ -33,15 +33,15 @@ const About = () => {
       </section>
 
       {/* Story Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+        <div className="container mx-auto px-4 w-full">
+          <div className="max-w-4xl mx-auto w-full">
             <SectionHeader
               headline="Our Story"
               centered
             />
 
-            <div className="prose prose-lg mx-auto text-nh-grey">
+            <div className="prose prose-lg mx-auto text-gray-300">
               <p className="text-lg leading-relaxed mb-6">
                 Bangalore's real estate market is overwhelming. Thousands of listings, aggressive sales pitches,
                 and no one who truly understands what makes a home both beautiful and a smart investment.
@@ -60,9 +60,9 @@ const About = () => {
       </section>
 
       {/* Our Approach */}
-      <section className="py-20 bg-nh-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+        <div className="container mx-auto px-4 w-full">
+          <div className="max-w-4xl mx-auto w-full">
             <SectionHeader
               headline="Our Approach"
               centered
@@ -76,10 +76,10 @@ const About = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="flex items-start gap-3 bg-white p-6 rounded-lg shadow-md"
+                  className="flex items-start gap-3 bg-nh-grey p-6 rounded-lg shadow-md border border-nh-copper/20"
                 >
                   <CheckCircle className="w-6 h-6 text-nh-copper flex-shrink-0 mt-1" />
-                  <p className="text-nh-charcoal font-medium">{approach}</p>
+                  <p className="text-white font-medium">{approach}</p>
                 </motion.div>
               ))}
             </div>
@@ -88,15 +88,15 @@ const About = () => {
       </section>
 
       {/* Vision */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+        <div className="container mx-auto px-4 w-full">
+          <div className="max-w-4xl mx-auto text-center w-full">
             <SectionHeader
               headline="Our Vision"
               centered
             />
 
-            <p className="text-xl text-nh-grey leading-relaxed mb-8">
+            <p className="text-xl text-gray-300 leading-relaxed mb-8">
               To become Bangalore's most trusted name for discerning homebuyers who refuse to compromise on quality.
             </p>
 

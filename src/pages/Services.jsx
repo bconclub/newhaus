@@ -19,7 +19,7 @@ const Services = () => {
     },
     {
       icon: MapPin,
-      title: 'Guided Sightseeing',
+      title: 'Guided Site Visit',
       description:
         'Personalized property tours with architectural insights. We help you see beyond the brochure.',
       details: [
@@ -27,18 +27,6 @@ const Services = () => {
         'Expert architectural walkthroughs',
         'Neighborhood and amenity tours',
         'Honest pros and cons discussion',
-      ],
-    },
-    {
-      icon: FileText,
-      title: 'Documentation Support',
-      description:
-        'From offer letters to sale deeds, we guide you through paperwork. Clear, transparent, stress-free.',
-      details: [
-        'Legal document review and guidance',
-        'Sale agreement assistance',
-        'Loan documentation support',
-        'Registration and handover coordination',
       ],
     },
     {
@@ -65,6 +53,18 @@ const Services = () => {
         'Property management coordination',
       ],
     },
+    {
+      icon: FileText,
+      title: 'Documentation Support',
+      description:
+        'From offer letters to sale deeds, we guide you through paperwork. Clear, transparent, stress-free.',
+      details: [
+        'Legal document review and guidance',
+        'Sale agreement assistance',
+        'Loan documentation support',
+        'Registration and handover coordination',
+      ],
+    },
   ];
 
   return (
@@ -88,9 +88,9 @@ const Services = () => {
       </section>
 
       {/* Services Details */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto space-y-16">
+      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+        <div className="container mx-auto px-4 w-full">
+          <div className="max-w-5xl mx-auto space-y-16 w-full">
             {services.map((service, index) => (
               <motion.div
                 key={index}
@@ -111,20 +111,20 @@ const Services = () => {
 
                 {/* Content */}
                 <div className="flex-1">
-                  <h2 className="text-3xl font-heading font-bold text-nh-charcoal mb-4">
+                  <h2 className="text-3xl font-heading font-bold text-white mb-4">
                     {service.title}
                   </h2>
-                  <p className="text-lg text-nh-grey mb-6">
+                  <p className="text-lg text-gray-300 mb-6">
                     {service.description}
                   </p>
 
-                  <div className="bg-nh-cream p-6 rounded-lg">
-                    <h3 className="font-semibold text-nh-charcoal mb-3">
+                  <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20">
+                    <h3 className="font-semibold text-white mb-3">
                       What's Included:
                     </h3>
                     <ul className="space-y-2">
                       {service.details.map((detail, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-nh-grey">
+                        <li key={idx} className="flex items-start gap-2 text-gray-300">
                           <span className="w-1.5 h-1.5 bg-nh-copper rounded-full mt-2 flex-shrink-0"></span>
                           <span>{detail}</span>
                         </li>
@@ -139,12 +139,12 @@ const Services = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-nh-cream">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-nh-charcoal mb-6">
+      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+        <div className="container mx-auto px-4 text-center w-full">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
             Ready to Get Started?
           </h2>
-          <p className="text-lg text-nh-grey mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
             Let's discuss how we can help you find your perfect home in Bangalore.
           </p>
           <Button to="/contact" size="lg">

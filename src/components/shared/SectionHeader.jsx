@@ -6,11 +6,11 @@ const SectionHeader = ({ smallText, headline, subtext, centered = false }) => {
           {smallText}
         </p>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-nh-charcoal mb-4">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
         {headline}
       </h2>
       {subtext && (
-        <p className="text-nh-grey text-lg max-w-3xl">
+        <p className={`text-gray-300 text-lg max-w-3xl ${centered ? 'mx-auto' : ''}`}>
           {subtext}
         </p>
       )}

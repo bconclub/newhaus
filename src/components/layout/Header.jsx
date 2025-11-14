@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import logoImage from '../../assets/New Haus.png';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +33,7 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white shadow-md py-4'
+          ? 'bg-nh-charcoal shadow-md py-4 border-b border-nh-copper/20'
           : 'bg-transparent py-6'
       }`}
     >
@@ -40,13 +41,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <h1
-              className={`text-2xl md:text-3xl font-heading font-bold transition-colors ${
-                isScrolled ? 'text-nh-charcoal' : 'text-white'
-              }`}
-            >
-              New<span className="text-nh-copper">Haus</span>
-            </h1>
+            <img
+              src={logoImage}
+              alt="NewHaus"
+              className="h-20 md:h-24 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -58,8 +57,6 @@ const Header = () => {
                 className={`font-medium transition-colors ${
                   location.pathname === link.path
                     ? 'text-nh-copper'
-                    : isScrolled
-                    ? 'text-nh-charcoal hover:text-nh-copper'
                     : 'text-white hover:text-nh-copper'
                 }`}
               >
@@ -77,9 +74,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden ${
-              isScrolled ? 'text-nh-charcoal' : 'text-white'
-            }`}
+            className="md:hidden text-white"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -88,15 +83,15 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 bg-white rounded-lg shadow-lg">
+          <nav className="md:hidden mt-4 pb-4 bg-nh-grey rounded-lg shadow-lg border border-nh-copper/20">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`block px-4 py-3 transition-colors ${
                   location.pathname === link.path
-                    ? 'text-nh-copper bg-nh-cream'
-                    : 'text-nh-charcoal hover:bg-nh-cream'
+                    ? 'text-nh-copper bg-nh-charcoal/30'
+                    : 'text-white hover:bg-nh-charcoal/30'
                 }`}
               >
                 {link.name}

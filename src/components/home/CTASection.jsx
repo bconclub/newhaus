@@ -3,7 +3,7 @@ import Button from '../shared/Button';
 
 const CTASection = () => {
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section className="relative min-h-[80vh] flex items-center overflow-hidden py-24">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img

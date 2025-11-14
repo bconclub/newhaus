@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
-const ContactForm = ({ propertyInterest = '' }) => {
+const ContactForm = ({ propertyInterest = '', onSuccess }) => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -44,8 +44,12 @@ const ContactForm = ({ propertyInterest = '' }) => {
         throw new Error('Submission failed');
       }
 
-      // Success - redirect to thank you page
-      navigate('/thank-you');
+      // Success - call onSuccess callback if provided, otherwise navigate
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        navigate('/thank-you');
+      }
     } catch (err) {
       setError('Unable to submit. Please try again or call us at +91 98765 43210');
       setIsSubmitting(false);
@@ -56,14 +60,14 @@ const ContactForm = ({ propertyInterest = '' }) => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-nh-charcoal mb-1">
+        <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
           Name *
         </label>
         <input
           id="name"
           type="text"
           {...register('name', { required: 'Name is required' })}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper placeholder-gray-400"
           placeholder="Your full name"
         />
         {errors.name && (
@@ -73,7 +77,7 @@ const ContactForm = ({ propertyInterest = '' }) => {
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-nh-charcoal mb-1">
+        <label htmlFor="email" className="block text-sm font-medium text-white mb-1">
           Email *
         </label>
         <input
@@ -86,7 +90,7 @@ const ContactForm = ({ propertyInterest = '' }) => {
               message: 'Invalid email address',
             },
           })}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper placeholder-gray-400"
           placeholder="your@email.com"
         />
         {errors.email && (
@@ -96,7 +100,7 @@ const ContactForm = ({ propertyInterest = '' }) => {
 
       {/* Phone */}
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-nh-charcoal mb-1">
+        <label htmlFor="phone" className="block text-sm font-medium text-white mb-1">
           Phone *
         </label>
         <input
@@ -109,7 +113,7 @@ const ContactForm = ({ propertyInterest = '' }) => {
               message: 'Invalid phone number',
             },
           })}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper placeholder-gray-400"
           placeholder="+91 98765 43210"
         />
         {errors.phone && (
@@ -119,15 +123,15 @@ const ContactForm = ({ propertyInterest = '' }) => {
 
       {/* Budget Range */}
       <div>
-        <label htmlFor="budget_range" className="block text-sm font-medium text-nh-charcoal mb-1">
+        <label htmlFor="budget_range" className="block text-sm font-medium text-white mb-1">
           Budget Range
         </label>
         <select
           id="budget_range"
           {...register('budget_range')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper"
         >
-          <option value="">Select budget range</option>
+          <option value="" className="bg-nh-charcoal">Select budget range</option>
           <option value="1-2 Cr">1-2 Cr</option>
           <option value="2-3 Cr">2-3 Cr</option>
           <option value="3-5 Cr">3-5 Cr</option>
@@ -138,15 +142,15 @@ const ContactForm = ({ propertyInterest = '' }) => {
 
       {/* Property Interest */}
       <div>
-        <label htmlFor="property_interest" className="block text-sm font-medium text-nh-charcoal mb-1">
+        <label htmlFor="property_interest" className="block text-sm font-medium text-white mb-1">
           Property Interest
         </label>
         <select
           id="property_interest"
           {...register('property_interest')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper"
         >
-          <option value="">Select property</option>
+          <option value="" className="bg-nh-charcoal">Select property</option>
           <option value="Embassy Lake Terraces">Embassy Lake Terraces</option>
           <option value="Embassy Grove">Embassy Grove</option>
           <option value="Embassy Boulevard">Embassy Boulevard</option>
@@ -156,36 +160,28 @@ const ContactForm = ({ propertyInterest = '' }) => {
         </select>
       </div>
 
-      {/* Timeline */}
+      {/* Property Type */}
       <div>
-        <label htmlFor="timeline" className="block text-sm font-medium text-nh-charcoal mb-1">
-          Timeline
+        <label htmlFor="property_type" className="block text-sm font-medium text-white mb-1">
+          Property Type *
         </label>
         <select
-          id="timeline"
-          {...register('timeline')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
+          id="property_type"
+          {...register('property_type', { required: 'Property type is required' })}
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper"
         >
-          <option value="">Select timeline</option>
-          <option value="Immediate (0-3 months)">Immediate (0-3 months)</option>
-          <option value="Planning (3-6 months)">Planning (3-6 months)</option>
-          <option value="Exploring (6-12 months)">Exploring (6-12 months)</option>
-          <option value="Just researching">Just researching</option>
+          <option value="" className="bg-nh-charcoal">Select property type</option>
+          <option value="2 BHK" className="bg-nh-charcoal">2 BHK</option>
+          <option value="3 BHK" className="bg-nh-charcoal">3 BHK</option>
+          <option value="4 BHK" className="bg-nh-charcoal">4 BHK</option>
+          <option value="5 BHK" className="bg-nh-charcoal">5 BHK</option>
+          <option value="Penthouse" className="bg-nh-charcoal">Penthouse</option>
+          <option value="Villa" className="bg-nh-charcoal">Villa</option>
+          <option value="Plot/Land" className="bg-nh-charcoal">Plot/Land</option>
         </select>
-      </div>
-
-      {/* Message */}
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium text-nh-charcoal mb-1">
-          Message
-        </label>
-        <textarea
-          id="message"
-          rows="4"
-          {...register('message')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-nh-copper focus:border-transparent"
-          placeholder="Tell us more about what you're looking for..."
-        ></textarea>
+        {errors.property_type && (
+          <p className="mt-1 text-sm text-red-600">{errors.property_type.message}</p>
+        )}
       </div>
 
       {/* Error Message */}

@@ -4,8 +4,8 @@ export const properties = [
     slug: 'embassy-lake-terraces',
     name: 'Embassy Lake Terraces',
     tagline: 'Ultra Luxury Lake-View Condominiums',
-    location: 'Hebbal, 25 Kms from KIA',
-    price: '₹1.65 Cr onwards',
+    location: 'Hebbal, 25 Kms KIA',
+    price: 'From ₹1.65 Cr',
     priceValue: 16500000,
     images: {
       hero: '/images/properties/lake-terraces-hero.jpg',
@@ -16,25 +16,77 @@ export const properties = [
       ]
     },
     highlights: [
-      'Lake views',
-      '25 km from airport',
-      'Premium amenities'
+      'OC Received - Completed',
+      '467 Units across 9 Towers',
+      'Signature Units: 4 & 5 BHK from ₹19 Cr',
+      '73% Carpet Area Efficiency'
     ],
-    description: 'Ultra-luxury lake-view condominiums that redefine urban living in North Bangalore. Embassy Lake Terraces offers serene lake views combined with proximity to the airport and IT corridors. Architecturally distinctive with spacious layouts, these homes are designed for those who appreciate natural beauty without compromising on connectivity.',
+    description: 'Ultra-luxury lake-view condominiums that redefine urban living in North Bangalore. Embassy Lake Terraces offers serene lake views combined with proximity to the airport and IT corridors. With OC received and project completed, this development features 9 towers (G+21 floors) housing 467 units. The signature units offer 4 & 5 BHK Simplex and Duplex configurations ranging from 7825-9156 sft, starting at ₹19 Cr onwards.',
     features: [
-      'Ultra-luxury condominiums',
-      'Serene lake views',
-      '25 km from Kempegowda International Airport',
-      'Premium clubhouse and amenities',
-      'Well-connected to IT hubs'
+      '467 Units across 9 Towers',
+      'G+21 Floors',
+      'Unit Types: 3, 4, 5 BHK & 5 BHK Penthouse',
+      '3 BHK: 3544 - 4200 sft',
+      '4 BHK: 4400 - 5889 sft',
+      '5 BHK: 7825 - 9156 sft',
+      '73% Carpet Area Efficiency',
+      'OC Received - Project Completed',
+      'BBMP Approved',
+      '14.5 Acres Land Area'
     ],
     locationHighlights: [
       'Hebbal: Established residential area',
-      'Close to Manyata Tech Park',
-      'Excellent connectivity via ORR',
-      'Growing infrastructure'
+      '25 Kms from Kempegowda International Airport',
+      'Next to Esteem Mall/Columbia Asia',
+      'Excellent connectivity via NH 7',
+      'Close to Manyata Tech Park'
     ],
-    address: 'NH 7, Service Rd, Subramani Nagar, Guddadahalli, Hebbal Kempapura, next to Esteem Mall/Columbia Asia, Bengaluru, Karnataka 560032',
+    address: 'NH 7, Service Rd, Subramani Nagar, Guddadahalli, Hebbal Kempapura, (next to Esteem Mall/Columbia Asia) Bengaluru, Karnataka 560032',
+    projectDetails: {
+      developmentType: 'Ultra Luxury Lake-View Condominiums',
+      landArea: '14.5 Acres',
+      approvalStatus: 'Approved',
+      approvalBy: 'BBMP',
+      launchDate: '12-Jun',
+      currentStatus: 'OC Received',
+      completionDate: 'Completed',
+      totalUnits: 467,
+      towers: 9,
+      floors: 'G+21',
+      unitTypes: '3, 4, 5 BHK & 5 BHK Penthouse',
+      unitSizes: {
+        '3 BHK': '3544 - 4200 sft',
+        '4 BHK': '4400 - 5889 sft',
+        '5 BHK': '7825 - 9156 sft'
+      },
+      carpetEfficiency: '73%',
+      basePricePerSft: '₹25,000/- (Signature Units)',
+      currentAvailability: '4 & 5 BHK Simplex and Duplex (Signature Units): 7825-9156sft, Price Starts at ₹19 Cr Onwards',
+      architects: 'Andy Fisher Workshop',
+      contractors: 'JMC Projects India Ltd.',
+      approvedBanks: [
+        'HDFC', 'SBI', 'PNB', 'Federal Bank', 'Kotak Mahindra', 'LIC', 'HSBC', 
+        'India Bulls', 'ICICI', 'Standard Chartered', 'Axis Bank', 'Citibank', 'Bajaj Finance'
+      ]
+    },
+    amenities: [
+      'Ground level: Boardwalk, Paw Park, Amphitheatre, Cricket net, Kids studio, Jogging trail, Tennis, Badminton and Basketball courts, Skating rink, Laundromat, Convenience store',
+      'Sky Deck: Putting green, Kids play area, Yoga deck, Landscaped terraces, Jogging track, Yoga room, Sky-Gym & Barbeque corner',
+      'Club: Gym, Spa, Squash court, Table Tennis, Banquet Hall, F&B, Retail space, Swimming pool, Sauna, Steam and Massage room',
+      'Sky Lounge: 10,000 sft Sky Lounge on 21st Floor'
+    ],
+    usps: [
+      'Location & Connectivity',
+      'Architecture by Andy Fisher Workshop',
+      '75% lung space',
+      '3.5 acres central podium',
+      '55,000 sft Club house',
+      '65,000 sft outdoor leisure',
+      '2 acre Sky deck on 11th floor',
+      'Dining lounge on 21st floor',
+      'Lake views & greenery',
+      'Twisted Building architecture'
+    ],
     featured: true
   },
   {

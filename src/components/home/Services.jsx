@@ -12,15 +12,9 @@ const Services = () => {
     },
     {
       icon: MapPin,
-      title: 'Guided Sightseeing',
+      title: 'Guided Site Visit',
       description:
         'Personalized property tours with architectural insights. We help you see beyond the brochure.',
-    },
-    {
-      icon: FileText,
-      title: 'Documentation Support',
-      description:
-        'From offer letters to sale deeds, we guide you through paperwork. Clear, transparent, stress-free.',
     },
     {
       icon: LineChart,
@@ -34,11 +28,17 @@ const Services = () => {
       description:
         'Remote buying made simple. FEMA compliance, property management, and trusted local support.',
     },
+    {
+      icon: FileText,
+      title: 'Documentation Support',
+      description:
+        'From offer letters to sale deeds, we guide you through paperwork. Clear, transparent, stress-free.',
+    },
   ];
 
   return (
-    <section className="py-20 bg-nh-charcoal">
-      <div className="container mx-auto px-4">
+    <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+      <div className="container mx-auto px-4 w-full">
         <SectionHeader
           smallText="WHAT WE DO"
           headline="End-to-End Support for Your Home Journey"

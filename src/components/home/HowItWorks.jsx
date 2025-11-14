@@ -29,8 +29,8 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 bg-nh-cream">
-      <div className="container mx-auto px-4">
+    <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+      <div className="container mx-auto px-4 w-full">
         <SectionHeader
           headline="Your Journey to NewHaus"
           centered
@@ -57,10 +57,10 @@ const HowItWorks = () => {
                 <div className="text-4xl font-heading font-bold text-nh-copper mb-2">
                   {step.number}
                 </div>
-                <h3 className="text-2xl font-heading font-bold text-nh-charcoal mb-3">
+                <h3 className="text-2xl font-heading font-bold text-white mb-3">
                   {step.title}
                 </h3>
-                <p className="text-nh-grey">{step.description}</p>
+                <p className="text-gray-300">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -85,10 +85,10 @@ const HowItWorks = () => {
                   <div className="text-2xl font-heading font-bold text-nh-copper mb-1">
                     {step.number}
                   </div>
-                  <h3 className="text-xl font-heading font-bold text-nh-charcoal mb-2">
+                  <h3 className="text-xl font-heading font-bold text-white mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-nh-grey">{step.description}</p>
+                  <p className="text-gray-300">{step.description}</p>
                 </div>
               </motion.div>
             ))}

@@ -1,21 +1,29 @@
 @import "tailwindcss";
 
-@theme {
-  --color-nh-charcoal: #2B2B2B;
-  --color-nh-copper: #C87533;
-  --color-nh-cream: #F5F3EF;
-  --color-nh-orange: #FF6B35;
-  --color-nh-grey: #3D4852;
+@font-face {
+  font-family: 'Kugile Demo';
+  src: url('./assets/Kugile_Demo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --font-heading: 'Playfair Display', serif;
+@theme {
+  --color-nh-charcoal: #292929;
+  --color-nh-copper: #9b8b67;
+  --color-nh-cream: #F5F3EF;
+  --color-nh-orange: #8a7a5a;
+  --color-nh-grey: #1a1a1a;
+
+  --font-heading: 'Kugile Demo', 'Playfair Display', serif;
   --font-body: Inter, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
   body {
     font-family: var(--font-body);
-    color: var(--color-nh-charcoal);
-    background-color: white;
+    color: #ffffff;
+    background-color: #292929;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -35,16 +43,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F5F3EF;
+  background: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C87533;
+  background: #9b8b67;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #B06628;
+  background: #8a7a5a;
 }
 
 /* Smooth scrolling */

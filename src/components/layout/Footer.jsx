@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Facebook, Mail, Phone, MapPin } from 'lucide-react';
+import logoImage from '../../assets/New Haus.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -24,9 +25,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Left Column - Branding */}
           <div>
-            <h2 className="text-3xl font-heading font-bold mb-4">
-              New<span className="text-nh-copper">Haus</span>
-            </h2>
+            <img
+              src={logoImage}
+              alt="NewHaus"
+              className="h-20 mb-4 w-auto"
+            />
             <p className="text-nh-cream text-sm">
               Curating Exceptional Homes in Bangalore
             </p>
@@ -59,19 +62,19 @@ const Footer = () => {
             <ul className="space-y-3 text-nh-cream text-sm">
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-nh-copper" />
-                <a href="tel:+919876543210" className="hover:text-nh-copper transition-colors">
-                  +91 98765 43210
+                <a href="tel:+919591004043" className="hover:text-nh-copper transition-colors">
+                  +91 9591004043
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-nh-copper" />
-                <a href="mailto:hello@newhaus.in" className="hover:text-nh-copper transition-colors">
-                  hello@newhaus.in
+                <a href="mailto:Contact@newhaus.in" className="hover:text-nh-copper transition-colors">
+                  Contact@newhaus.in
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={16} className="text-nh-copper mt-1 flex-shrink-0" />
-                <span>Bangalore, India</span>
+                <span>Balaji Building, Shop No 4, 1st Floor, Hennur Bagalur Main Rd, above Ammas Bakery, Kothanur, Bengaluru, Karnataka 560077</span>
               </li>
             </ul>
           </div>
