@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import ContactForm from '../components/shared/ContactForm';
 import SectionHeader from '../components/shared/SectionHeader';
+import heroImage003 from '../assets/New Haus 003.webp';
 
 const Contact = () => {
   const contactInfo = [
@@ -32,16 +33,26 @@ const Contact = () => {
   ];
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
-      <section className="relative py-32 bg-nh-charcoal">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative h-[60vh] flex items-center justify-center bg-nh-charcoal overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+          style={{
+            backgroundImage: `url(${heroImage003})`
+          }}
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-nh-charcoal/60" />
+        {/* Content */}
+        <div className="container mx-auto px-6 md:px-4 text-center relative z-10 pt-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 drop-shadow-2xl">
               Let's Find Your New<span className="text-nh-copper">Haus</span>
             </h1>
             <p className="text-lg md:text-xl text-nh-cream max-w-3xl mx-auto">
@@ -53,7 +64,7 @@ const Contact = () => {
 
       {/* Contact Section */}
       <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
-        <div className="container mx-auto px-4 w-full">
+        <div className="container mx-auto px-6 md:px-4 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto w-full">
             {/* Contact Form */}
             <motion.div

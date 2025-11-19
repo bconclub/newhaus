@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logoImage from '../../assets/New Haus.png';
+import logoImage from '../../assets/Newhaus logo.webp';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,8 +33,8 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-nh-charcoal shadow-md py-4 border-b border-nh-copper/20'
-          : 'bg-transparent py-6'
+          ? 'bg-nh-charcoal shadow-md py-3 border-b border-nh-copper/20'
+          : 'bg-transparent py-4'
       }`}
     >
       <div className="container mx-auto px-4">
@@ -44,7 +44,7 @@ const Header = () => {
             <img
               src={logoImage}
               alt="NewHaus"
-              className="h-20 md:h-24 w-auto"
+              className="h-14 md:h-16 w-auto"
             />
           </Link>
 

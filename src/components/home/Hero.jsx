@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Button from '../shared/Button';
-import headerVideo from '../../assets/New Haus Header.mp4';
+import headerVideo from '../../assets/NH Header.mp4';
 
 const Hero = () => {
   return (
@@ -16,7 +16,7 @@ const Hero = () => {
         >
           <source src={headerVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black opacity-70"></div>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
       </div>
 
       {/* Content */}
@@ -33,13 +33,18 @@ const Hero = () => {
             Stop scrolling and find the right home
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button to="/properties" variant="primary" size="lg">
-              Explore Curated Homes
-            </Button>
-            <Button to="/contact" variant="outline" size="lg">
-              Schedule a Consultation
-            </Button>
+          <div className="flex justify-center items-center">
+            <button
+              onClick={() => {
+                const element = document.getElementById('featured-properties');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+              className="bg-nh-copper text-white px-4 py-2 rounded-md hover:bg-nh-orange transition-colors text-lg font-heading font-bold tracking-widest"
+            >
+              Explore Homes
+            </button>
           </div>
         </motion.div>
       </div>

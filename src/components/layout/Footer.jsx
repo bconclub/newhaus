@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Facebook, Mail, Phone, MapPin } from 'lucide-react';
-import logoImage from '../../assets/New Haus.png';
+import logoImage from '../../assets/Newhaus logo.webp';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

@@ -7,6 +7,7 @@ import ContactForm from '../components/shared/ContactForm';
 import Button from '../components/shared/Button';
 import Modal from '../components/shared/Modal';
 import Tabs from '../components/shared/Tabs';
+import fallbackImage001 from '../assets/New Haus 001.webp';
 
 const PropertyDetail = () => {
   const { slug } = useParams();
@@ -35,48 +36,62 @@ const PropertyDetail = () => {
           <div>
             <h3 className="text-xl font-heading font-bold text-white mb-4">Why This Property</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-2 text-gray-300">
-                <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
-                <span>OC Received - Ready to Move In</span>
-              </li>
-              <li className="flex items-start gap-2 text-gray-300">
-                <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
-                <span>73% Carpet Area Efficiency - Maximum Usable Space</span>
-              </li>
-              <li className="flex items-start gap-2 text-gray-300">
-                <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
-                <span>Premium Location: 25 Kms from Airport, Next to Esteem Mall</span>
-              </li>
-              <li className="flex items-start gap-2 text-gray-300">
-                <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
-                <span>Architecture by Andy Fisher Workshop - Internationally Acclaimed Design</span>
-              </li>
-              <li className="flex items-start gap-2 text-gray-300">
-                <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
-                <span>75% Lung Space & 2 Acre Sky Deck - Unmatched Green Living</span>
-              </li>
+              {property.whyThisProperty ? (
+                property.whyThisProperty.map((point, index) => (
+                  <li key={index} className="flex items-start gap-2 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
+                    <span>{point}</span>
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li className="flex items-start gap-2 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
+                    <span>OC Received - Ready to Move In</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
+                    <span>{property.projectDetails.carpetEfficiency} Carpet Area Efficiency - Maximum Usable Space</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-nh-copper flex-shrink-0 mt-0.5" />
+                    <span>Premium Location: {property.location}</span>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 
           <div>
             <h3 className="text-xl font-heading font-bold text-white mb-4">Ideal For</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
-                <h4 className="text-nh-copper font-semibold mb-2">Primary Residence Seekers</h4>
-                <p className="text-gray-300 text-sm">Ready-to-move-in homes with OC received, perfect for families looking for immediate occupancy.</p>
-              </div>
-              <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
-                <h4 className="text-nh-copper font-semibold mb-2">Luxury Home Buyers</h4>
-                <p className="text-gray-300 text-sm">Signature 4 & 5 BHK units with premium finishes and lake views for discerning buyers.</p>
-              </div>
-              <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
-                <h4 className="text-nh-copper font-semibold mb-2">Investors</h4>
-                <p className="text-gray-300 text-sm">Completed project with strong rental potential and appreciation in North Bangalore corridor.</p>
-              </div>
-              <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
-                <h4 className="text-nh-copper font-semibold mb-2">NRI Buyers</h4>
-                <p className="text-gray-300 text-sm">Ready possession with multiple approved banks for easy financing and documentation support.</p>
-              </div>
+              {property.idealFor ? (
+                property.idealFor.map((item, index) => (
+                  <div key={index} className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
+                    <h4 className="text-nh-copper font-semibold mb-2">{item.title}</h4>
+                    <p className="text-gray-300 text-sm">{item.description}</p>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
+                    <h4 className="text-nh-copper font-semibold mb-2">Primary Residence Seekers</h4>
+                    <p className="text-gray-300 text-sm">Ready-to-move-in homes with OC received, perfect for families looking for immediate occupancy.</p>
+                  </div>
+                  <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
+                    <h4 className="text-nh-copper font-semibold mb-2">Luxury Home Buyers</h4>
+                    <p className="text-gray-300 text-sm">Premium units with exceptional finishes and views for discerning buyers.</p>
+                  </div>
+                  <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
+                    <h4 className="text-nh-copper font-semibold mb-2">Investors</h4>
+                    <p className="text-gray-300 text-sm">Completed project with strong rental potential and appreciation potential.</p>
+                  </div>
+                  <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20">
+                    <h4 className="text-nh-copper font-semibold mb-2">NRI Buyers</h4>
+                    <p className="text-gray-300 text-sm">Ready possession with multiple approved banks for easy financing and documentation support.</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </>
@@ -95,12 +110,31 @@ const PropertyDetail = () => {
                 <li>
                   <strong className="text-white">Total Land Area:</strong> {property.projectDetails.landArea}
                 </li>
-                <li>
-                  <strong className="text-white">Total Units:</strong> {property.projectDetails.totalUnits} Units
-                </li>
-                <li>
-                  <strong className="text-white">Towers:</strong> {property.projectDetails.towers} Towers ({property.projectDetails.floors})
-                </li>
+                {property.projectDetails.totalUnits && (
+                  <li>
+                    <strong className="text-white">Total Units:</strong> {property.projectDetails.totalUnits} Units
+                  </li>
+                )}
+                {property.projectDetails.totalPlots && (
+                  <li>
+                    <strong className="text-white">Total Plots:</strong> {property.projectDetails.totalPlots} Plots
+                  </li>
+                )}
+                {property.projectDetails.totalApartments && (
+                  <li>
+                    <strong className="text-white">Total Apartments:</strong> {property.projectDetails.totalApartments} Apartments
+                  </li>
+                )}
+                {property.projectDetails.towers && (
+                  <li>
+                    <strong className="text-white">Towers:</strong> {property.projectDetails.towers} Towers {property.projectDetails.floors && `(${property.projectDetails.floors})`}
+                  </li>
+                )}
+                {property.projectDetails.blocks && (
+                  <li>
+                    <strong className="text-white">Number of Blocks:</strong> {property.projectDetails.blocks} Blocks
+                  </li>
+                )}
                 <li>
                   <strong className="text-white">Approval Status:</strong> {property.projectDetails.approvalStatus} ({property.projectDetails.approvalBy}) - Launch: {property.projectDetails.launchDate}
                 </li>
@@ -112,15 +146,56 @@ const PropertyDetail = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-heading font-bold text-white mb-4">Unit Configuration</h3>
-            <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20">
-              <ul className="space-y-3 text-gray-300">
-                {property.projectDetails.unitSizes && Object.entries(property.projectDetails.unitSizes).map(([type, size]) => (
-                  <li key={type}>
-                    <strong className="text-white">{type}:</strong> {size}
-                  </li>
-                ))}
-              </ul>
+            <h3 className="text-xl font-heading font-bold text-white mb-4">Available Options</h3>
+            <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 space-y-6">
+              {property.slug === 'embassy-springs' ? (
+                <>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">PLOTS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.plotSizes && Object.entries(property.projectDetails.plotSizes).map(([type, size]) => (
+                        <li key={type}>
+                          <strong className="text-white">{type}:</strong> {size}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">APARTMENTS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.apartmentSizes && Object.entries(property.projectDetails.apartmentSizes).map(([type, size]) => (
+                        <li key={type}>
+                          <strong className="text-white">{type}:</strong> {size}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">VILLAS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.villaSizes && Object.entries(property.projectDetails.villaSizes).map(([type, size]) => (
+                        <li key={type}>
+                          <strong className="text-white">{type}:</strong> {size}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">RETAIL:</h4>
+                    <p className="text-gray-300">
+                      <strong className="text-white">Current BSP:</strong> {property.projectDetails.retailBSP}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <ul className="space-y-3 text-gray-300">
+                  {property.projectDetails.unitSizes && Object.entries(property.projectDetails.unitSizes).map(([type, size]) => (
+                    <li key={type}>
+                      <strong className="text-white">{type}:</strong> {size}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
@@ -140,17 +215,77 @@ const PropertyDetail = () => {
     <div className="space-y-6">
       <div>
         <h3 className="text-xl font-heading font-bold text-white mb-4">Available Unit Types</h3>
-        <p className="text-gray-300 mb-6">{property.projectDetails?.unitTypes || '3, 4, 5 BHK & 5 BHK Penthouse'}</p>
+        <p className="text-gray-300 mb-6">
+          {property.slug === 'embassy-grove' 
+            ? 'KGA & Non-KGA 4 BHK Duplex & 5 BHK Triplex'
+            : property.slug === 'embassy-springs'
+            ? 'PLOTS, APARTMENTS, VILLAS'
+            : property.projectDetails?.unitTypes || '3, 4, 5 BHK & 5 BHK Penthouse'
+          }
+        </p>
         
-        {property.projectDetails?.unitSizes && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {Object.entries(property.projectDetails.unitSizes).map(([type, size]) => (
-              <div key={type} className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 text-center">
-                <h4 className="text-xl font-heading font-bold text-white mb-2">{type}</h4>
-                <p className="text-nh-copper font-semibold">{size}</p>
-              </div>
-            ))}
+        {property.slug === 'embassy-one-four-seasons' && (
+          <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20 mb-6">
+            <p className="text-white font-semibold mb-2">Currently Available for Sale:</p>
+            <p className="text-gray-300 text-sm">South Tower - 1, 1.5, 2 BHK Units Only</p>
           </div>
+        )}
+        
+        {property.slug === 'embassy-springs' ? (
+          <div className="space-y-6 mb-8">
+            <div>
+              <h4 className="text-lg font-heading font-semibold text-nh-copper mb-4">PLOTS</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {property.projectDetails.plotSizes && Object.entries(property.projectDetails.plotSizes).map(([type, size]) => (
+                  <div key={type} className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 text-center">
+                    <h5 className="text-lg font-heading font-bold text-white mb-2">{type}</h5>
+                    <p className="text-nh-copper font-semibold">{size}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-lg font-heading font-semibold text-nh-copper mb-4">APARTMENTS</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {property.projectDetails.apartmentSizes && Object.entries(property.projectDetails.apartmentSizes).map(([type, size]) => (
+                  <div key={type} className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 text-center">
+                    <h5 className="text-lg font-heading font-bold text-white mb-2">{type}</h5>
+                    <p className="text-nh-copper font-semibold">{size}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-lg font-heading font-semibold text-nh-copper mb-4">VILLAS</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {property.projectDetails.villaSizes && Object.entries(property.projectDetails.villaSizes).map(([type, size]) => (
+                  <div key={type} className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 text-center">
+                    <h5 className="text-lg font-heading font-bold text-white mb-2">{type}</h5>
+                    <p className="text-nh-copper font-semibold">{size}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          property.projectDetails?.unitSizes && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {Object.entries(property.projectDetails.unitSizes).map(([type, size]) => {
+                // For Embassy One, only show available South Tower units (1, 1.5, 2 BHK)
+                if (property.slug === 'embassy-one-four-seasons') {
+                  if (type !== '1 Bedroom' && type !== '1.5 Bedroom' && type !== '2 Bedroom') {
+                    return null;
+                  }
+                }
+                return (
+                  <div key={type} className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20 text-center">
+                    <h4 className="text-xl font-heading font-bold text-white mb-2">{type}</h4>
+                    <p className="text-nh-copper font-semibold">{size}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )
         )}
 
         <Button
@@ -214,11 +349,19 @@ const PropertyDetail = () => {
         <h3 className="text-xl font-heading font-bold text-white mb-4">Distance to Key Landmarks</h3>
         <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20">
           <ul className="space-y-3 text-gray-300">
-            <li>• Kempegowda International Airport: 25 Kms</li>
-            <li>• Esteem Mall: Adjacent</li>
-            <li>• Columbia Asia Hospital: Adjacent</li>
-            <li>• Manyata Tech Park: 8 Kms</li>
-            <li>• Hebbal Lake: 2 Kms</li>
+            {property.distanceToLandmarks ? (
+              property.distanceToLandmarks.map((landmark, index) => (
+                <li key={index}>• {landmark.name}: {landmark.distance}</li>
+              ))
+            ) : (
+              <>
+                <li>• Kempegowda International Airport: 25 Kms</li>
+                <li>• Esteem Mall: Adjacent</li>
+                <li>• Columbia Asia Hospital: Adjacent</li>
+                <li>• Manyata Tech Park: 8 Kms</li>
+                <li>• Hebbal Lake: 2 Kms</li>
+              </>
+            )}
           </ul>
         </div>
       </div>
@@ -236,6 +379,22 @@ const PropertyDetail = () => {
           </ul>
         </div>
       </div>
+
+      {property.investmentHighlights && property.investmentHighlights.length > 0 && (
+        <div>
+          <h3 className="text-xl font-heading font-bold text-white mb-4">Investment Highlights</h3>
+          <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20">
+            <ul className="space-y-3">
+              {property.investmentHighlights.map((highlight, index) => (
+                <li key={index} className="flex items-start gap-2 text-gray-300">
+                  <span className="w-1.5 h-1.5 bg-nh-copper rounded-full mt-2 flex-shrink-0"></span>
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       <div>
         <h3 className="text-xl font-heading font-bold text-white mb-4">Map</h3>
@@ -260,27 +419,127 @@ const PropertyDetail = () => {
       {property.projectDetails && (
         <>
           <div>
-            <h3 className="text-xl font-heading font-bold text-white mb-4">Current Availability</h3>
+            <h3 className="text-xl font-heading font-bold text-white mb-4">Current Availability & Pricing</h3>
             <div className="bg-nh-grey p-6 rounded-lg border border-nh-copper/20">
-              <ul className="space-y-3 text-gray-300">
-                {property.projectDetails.unitSizes && (
-                  <>
-                    <li>
-                      <strong className="text-white">3 BHK ({property.projectDetails.unitSizes['3 BHK']}):</strong> From ₹1.65 Cr
-                    </li>
-                    <li>
-                      <strong className="text-white">4 BHK ({property.projectDetails.unitSizes['4 BHK']}):</strong> Price on Request
-                    </li>
-                    <li>
-                      <strong className="text-white">5 BHK Penthouses ({property.projectDetails.unitSizes['5 BHK']}):</strong> Price on Request
-                    </li>
-                  </>
-                )}
-              </ul>
-              <div className="mt-6 pt-6 border-t border-nh-copper/20">
-                <p className="text-white font-semibold mb-2">Signature Units Available:</p>
-                <p className="text-gray-300">{property.projectDetails.currentAvailability}</p>
-              </div>
+              {property.slug === 'embassy-springs' ? (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">PLOTS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.plotSizes && Object.entries(property.projectDetails.plotSizes).map(([type, size], index) => (
+                        <li key={index}>
+                          <strong className="text-white">{type} ({size}):</strong> Price on Request
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">APARTMENTS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.apartmentSizes && Object.entries(property.projectDetails.apartmentSizes).map(([type, size], index) => {
+                        const price = type === '3 BHK' ? 'SOLD OUT' : 'Price on Request';
+                        return (
+                          <li key={index}>
+                            <strong className="text-white">{type} ({size}):</strong> {price}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">VILLAS:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      {property.projectDetails.villaSizes && Object.entries(property.projectDetails.villaSizes).map(([type, size], index) => {
+                        // Extract price from size string
+                        const priceMatch = size.match(/Range: (.+)\)/);
+                        const price = priceMatch ? priceMatch[1] : 'Price on Request';
+                        const sizeOnly = size.split(' (')[0];
+                        return (
+                          <li key={index}>
+                            <strong className="text-white">{type} ({sizeOnly}):</strong> {price}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-heading font-semibold text-nh-copper mb-3">RETAIL:</h4>
+                    <p className="text-gray-300">
+                      <strong className="text-white">Current BSP:</strong> {property.projectDetails.retailBSP}
+                    </p>
+                  </div>
+                  {property.projectDetails.constructionStatus && (
+                    <div className="mt-6 pt-6 border-t border-nh-copper/20">
+                      <p className="text-white font-semibold mb-3">Construction Status:</p>
+                      <p className="text-gray-300 text-sm whitespace-pre-line">{property.projectDetails.constructionStatus}</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <ul className="space-y-3 text-gray-300">
+                  {property.projectDetails.unitSizes && Object.entries(property.projectDetails.unitSizes).map(([type, size], index) => {
+                    // Determine price based on unit type
+                    let price = 'Price on Request';
+                    
+                    if (property.slug === 'embassy-one-four-seasons') {
+                      // Only South Tower units (1, 1.5, 2 BHK) are available
+                      if (type === '1 Bedroom' || type === '1.5 Bedroom' || type === '2 Bedroom') {
+                        price = 'Price on Request';
+                      } else {
+                        // North Tower units are sold out
+                        return null;
+                      }
+                    } else if (type === '4 BHK Duplex' && property.price) {
+                      price = property.price;
+                    } else if (type === '4 BHK - Willow' && property.price) {
+                      price = property.price;
+                    } else if (type === '5 BHK Triplex') {
+                      price = 'Price on Request';
+                    } else if (type === '3 BHK') {
+                      price = 'From ₹1.65 Cr';
+                    } else if (type === '4 BHK - Pine' || type === '5 BHK - Cedar' || type === '5 BHK - Silver Oaks') {
+                      price = 'Price on Request';
+                    }
+                    
+                    return (
+                      <li key={index}>
+                        <strong className="text-white">{type} ({size}):</strong> {price}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {property.projectDetails.currentAvailability && (
+                <div className="mt-6 pt-6 border-t border-nh-copper/20">
+                  {property.slug === 'embassy-grove' && (
+                    <>
+                      <p className="text-white font-semibold mb-2">Special Units:</p>
+                      <ul className="space-y-2 text-gray-300 mb-4">
+                        <li>• KGA-facing units: Premium pricing</li>
+                        <li>• Non-KGA units: Available at attractive rates</li>
+                      </ul>
+                    </>
+                  )}
+                  {property.slug !== 'embassy-springs' && (
+                    <>
+                      <p className="text-white font-semibold mb-2">Current Availability:</p>
+                      <p className="text-gray-300">{property.projectDetails.currentAvailability}</p>
+                    </>
+                  )}
+                  {property.slug === 'embassy-one-four-seasons' && property.projectDetails.fourSeasonsServices && (
+                    <div className="mt-4 pt-4 border-t border-nh-copper/20">
+                      <p className="text-white font-semibold mb-2">Four Seasons Services:</p>
+                      <p className="text-gray-300 text-sm">{property.projectDetails.fourSeasonsServices}</p>
+                    </div>
+                  )}
+                  {property.slug === 'embassy-springs' && property.projectDetails.specialNotes && (
+                    <div className="mt-6 pt-6 border-t border-nh-copper/20">
+                      <p className="text-white font-semibold mb-3">Special Notes:</p>
+                      <p className="text-gray-300 text-sm whitespace-pre-line">{property.projectDetails.specialNotes}</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -318,57 +577,39 @@ const PropertyDetail = () => {
   ];
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Section 1: Hero */}
-      <section className="relative h-[70vh] md:h-[80vh]">
+      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
         <img
           src={property.images.hero}
           alt={property.name}
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
           onError={(e) => {
-            e.target.src = `https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&h=1080&fit=crop`;
+            e.target.src = fallbackImage001;
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-nh-charcoal/60"></div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 text-white">
-          <div className="container mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold mb-4">
-                {property.name}
-              </h1>
-              <p className="text-xl md:text-2xl text-nh-cream mb-4">{property.tagline}</p>
-              <div className="flex flex-wrap items-center gap-6 mb-6">
-                <div className="flex items-center gap-2">
-                  <MapPin className="text-nh-copper" size={20} />
-                  <span className="text-lg">{property.location}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Tag className="text-nh-copper" size={20} />
-                  <span className="text-2xl md:text-3xl font-heading font-bold">{property.price}</span>
-                </div>
-              </div>
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                variant="primary"
-                size="lg"
-                className="bg-nh-copper text-white hover:bg-nh-orange"
-              >
-                <Calendar className="w-5 h-5 mr-2 inline" />
-                Schedule a Viewing
-              </Button>
-            </motion.div>
-          </div>
+        {/* Content */}
+        <div className="container mx-auto px-6 md:px-4 text-center relative z-10 pt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4 drop-shadow-2xl">
+              {property.name}
+            </h1>
+            <p className="text-lg md:text-xl text-nh-cream mb-4">{property.tagline}</p>
+          </motion.div>
         </div>
       </section>
 
       {/* Section 2: Quick Overview */}
       <section className="bg-nh-charcoal py-12 border-b border-nh-copper/20">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-6 md:px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">
@@ -395,7 +636,7 @@ const PropertyDetail = () => {
                   <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20 text-center">
                     <CheckCircle className="w-6 h-6 text-nh-copper mx-auto mb-2" />
                     <p className="text-white font-semibold text-sm">{property.projectDetails.unitTypes}</p>
-                    <p className="text-gray-400 text-xs">Penthouses Available</p>
+                    <p className="text-gray-400 text-xs">{property.projectDetails.unitTypes.includes('Triplex') ? 'Triplex Available' : property.projectDetails.unitTypes.includes('Penthouse') ? 'Penthouses Available' : 'Units Available'}</p>
                   </div>
                   <div className="bg-nh-grey p-4 rounded-lg border border-nh-copper/20 text-center">
                     <CheckCircle className="w-6 h-6 text-nh-copper mx-auto mb-2" />
@@ -411,7 +652,7 @@ const PropertyDetail = () => {
 
       {/* Section 3: Tabbed Detail Sections */}
       <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
-        <div className="container mx-auto px-4 w-full">
+        <div className="container mx-auto px-6 md:px-4 w-full">
           <div className="max-w-6xl mx-auto">
             <Tabs tabs={tabs} />
           </div>

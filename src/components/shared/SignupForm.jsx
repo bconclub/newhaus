@@ -24,8 +24,21 @@ const SignupForm = ({ onSuccess }) => {
     };
 
     try {
-      // Placeholder webhook URL - client will provide actual URL
-      const webhookUrl = 'YOUR_N8N_WEBHOOK_URL_HERE';
+      // Webhook URL - use environment variable or placeholder
+      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'YOUR_N8N_WEBHOOK_URL_HERE';
+
+      // If webhook URL is not configured, simulate success for development
+      if (webhookUrl === 'YOUR_N8N_WEBHOOK_URL_HERE') {
+        console.log('Form submission (development mode):', payload);
+        // Simulate a delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Success - call onSuccess callback if provided
+        if (onSuccess) {
+          onSuccess();
+        }
+        return;
+      }
 
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -111,6 +124,29 @@ const SignupForm = ({ onSuccess }) => {
         />
         {errors.phone && (
           <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+        )}
+      </div>
+
+      {/* Property Type */}
+      <div>
+        <label htmlFor="signup-property-type" className="block text-sm font-medium text-white mb-1">
+          Property Type *
+        </label>
+        <select
+          id="signup-property-type"
+          {...register('property_type', { required: 'Property type is required' })}
+          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper"
+        >
+          <option value="" className="bg-nh-charcoal">Select property type</option>
+          <option value="2 BHK" className="bg-nh-charcoal">2 BHK</option>
+          <option value="3 BHK" className="bg-nh-charcoal">3 BHK</option>
+          <option value="4 BHK" className="bg-nh-charcoal">4 BHK</option>
+          <option value="5 BHK" className="bg-nh-charcoal">5 BHK</option>
+          <option value="Penthouse" className="bg-nh-charcoal">Penthouse</option>
+          <option value="Villa" className="bg-nh-charcoal">Villa</option>
+        </select>
+        {errors.property_type && (
+          <p className="mt-1 text-sm text-red-600">{errors.property_type.message}</p>
         )}
       </div>
 

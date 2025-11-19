@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 import SectionHeader from '../components/shared/SectionHeader';
 import Button from '../components/shared/Button';
+import heroImage004 from '../assets/New Haus 004.webp';
 
 const About = () => {
   const approaches = [
@@ -12,18 +13,27 @@ const About = () => {
   ];
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section */}
-      <section className="relative py-32 bg-nh-charcoal">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative h-[60vh] flex items-center justify-center bg-nh-charcoal overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+          style={{
+            backgroundImage: `url(${heroImage004})`
+          }}
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-nh-charcoal/60" />
+        {/* Content */}
+        <div className="container mx-auto px-6 md:px-4 text-center relative z-10 pt-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6">
-              We're Not Just Property Advisors.<br />
-              We're Home Curators.
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 drop-shadow-2xl">
+              We're home curators
             </h1>
             <p className="text-lg md:text-xl text-nh-cream max-w-3xl mx-auto">
               Founded by professionals who've experienced the frustration of Bangalore's property hunt firsthand.
@@ -33,8 +43,8 @@ const About = () => {
       </section>
 
       {/* Story Section */}
-      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
-        <div className="container mx-auto px-4 w-full">
+      <section className="flex items-center bg-nh-charcoal pt-12 pb-12">
+        <div className="container mx-auto px-6 md:px-4 w-full">
           <div className="max-w-4xl mx-auto w-full">
             <SectionHeader
               headline="Our Story"
@@ -60,8 +70,8 @@ const About = () => {
       </section>
 
       {/* Our Approach */}
-      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
-        <div className="container mx-auto px-4 w-full">
+      <section className="flex items-center bg-nh-charcoal pt-12 pb-12">
+        <div className="container mx-auto px-6 md:px-4 w-full">
           <div className="max-w-4xl mx-auto w-full">
             <SectionHeader
               headline="Our Approach"
@@ -88,8 +98,8 @@ const About = () => {
       </section>
 
       {/* Vision */}
-      <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
-        <div className="container mx-auto px-4 w-full">
+      <section className="flex items-center bg-nh-charcoal pt-12 pb-12">
+        <div className="container mx-auto px-6 md:px-4 w-full">
           <div className="max-w-4xl mx-auto text-center w-full">
             <SectionHeader
               headline="Our Vision"

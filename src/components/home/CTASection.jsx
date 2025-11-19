@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import Button from '../shared/Button';
+import fallbackImage003 from '../../assets/New Haus 003.webp';
 
 const CTASection = () => {
   return (
@@ -11,7 +12,7 @@ const CTASection = () => {
           alt="NewHaus consultation"
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=600&fit=crop';
+            e.target.src = fallbackImage003;
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-nh-charcoal/90 to-nh-charcoal/70"></div>

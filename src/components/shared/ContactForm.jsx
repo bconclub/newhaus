@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { properties } from '../../data/properties';
 import Button from './Button';
 
 const ContactForm = ({ propertyInterest = '', onSuccess }) => {
   const navigate = useNavigate();
+  const { slug } = useParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Auto-detect property from URL or use prop
+  const detectedProperty = slug ? properties.find(p => p.slug === slug) : null;
+  const propertyName = detectedProperty?.name || propertyInterest || '';
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      property_interest: propertyInterest,
-    },
-  });
+  } = useForm();
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
@@ -24,13 +26,29 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
 
     const payload = {
       ...data,
+      property_interest: propertyName, // Automatically include detected property
       submitted_at: new Date().toISOString(),
       source_page: window.location.href,
     };
 
     try {
-      // Placeholder webhook URL - client will provide actual URL
-      const webhookUrl = 'YOUR_N8N_WEBHOOK_URL_HERE';
+      // Webhook URL - use environment variable or placeholder
+      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'YOUR_N8N_WEBHOOK_URL_HERE';
+
+      // If webhook URL is not configured, simulate success for development
+      if (webhookUrl === 'YOUR_N8N_WEBHOOK_URL_HERE') {
+        console.log('Form submission (development mode):', payload);
+        // Simulate a delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Success - call onSuccess callback if provided, otherwise navigate
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          navigate('/thank-you');
+        }
+        return;
+      }
 
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -140,26 +158,6 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
         </select>
       </div>
 
-      {/* Property Interest */}
-      <div>
-        <label htmlFor="property_interest" className="block text-sm font-medium text-white mb-1">
-          Property Interest
-        </label>
-        <select
-          id="property_interest"
-          {...register('property_interest')}
-          className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper"
-        >
-          <option value="" className="bg-nh-charcoal">Select property</option>
-          <option value="Embassy Lake Terraces">Embassy Lake Terraces</option>
-          <option value="Embassy Grove">Embassy Grove</option>
-          <option value="Embassy Boulevard">Embassy Boulevard</option>
-          <option value="Embassy One (Four Seasons)">Embassy One (Four Seasons)</option>
-          <option value="Embassy Springs">Embassy Springs</option>
-          <option value="Not sure yet">Not sure yet</option>
-        </select>
-      </div>
-
       {/* Property Type */}
       <div>
         <label htmlFor="property_type" className="block text-sm font-medium text-white mb-1">
@@ -177,7 +175,6 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
           <option value="5 BHK" className="bg-nh-charcoal">5 BHK</option>
           <option value="Penthouse" className="bg-nh-charcoal">Penthouse</option>
           <option value="Villa" className="bg-nh-charcoal">Villa</option>
-          <option value="Plot/Land" className="bg-nh-charcoal">Plot/Land</option>
         </select>
         {errors.property_type && (
           <p className="mt-1 text-sm text-red-600">{errors.property_type.message}</p>

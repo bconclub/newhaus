@@ -10,7 +10,7 @@
 
 @theme {
   --color-nh-charcoal: #292929;
-  --color-nh-copper: #9b8b67;
+  --color-nh-copper: #c3a274;
   --color-nh-cream: #F5F3EF;
   --color-nh-orange: #8a7a5a;
   --color-nh-grey: #1a1a1a;
@@ -47,7 +47,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9b8b67;
+  background: #c3a274;
   border-radius: 5px;
 }
 

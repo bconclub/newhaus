@@ -30,7 +30,7 @@ const FeaturedProperties = () => {
   };
 
   return (
-    <section className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
+    <section id="featured-properties" className="min-h-[80vh] flex items-center bg-nh-charcoal py-20">
       <div className="container mx-auto px-4 w-full">
         <SectionHeader
           smallText="CURATED FOR YOU"
@@ -57,6 +57,7 @@ const FeaturedProperties = () => {
           {/* 3rd Property - Locked or Unlocked */}
           {blurredProperty && (
             <motion.div
+              key={formSubmitted ? 'unlocked' : 'locked'}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -95,13 +96,32 @@ const FeaturedProperties = () => {
             </motion.div>
           )}
         </div>
+
+        {/* View All Properties Button - Shows after form submission */}
+        {formSubmitted && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex justify-center mt-12"
+          >
+            <Button
+              to="/properties"
+              variant="primary"
+              size="lg"
+              className="bg-nh-copper text-white px-8 py-3 rounded-md hover:bg-nh-orange transition-colors"
+            >
+              View All Properties
+            </Button>
+          </motion.div>
+        )}
       </div>
 
       {/* Sign Up Form Modal - To unlock more properties */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Sign Up"
+        title="Sign Up to New Haus"
       >
         <p className="text-gray-300 mb-6 text-sm">
           Sign up for unlimited access
