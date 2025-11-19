@@ -31,6 +31,8 @@ const PreviewLoader = ({ onComplete, onProgress }) => {
   // Calculate blur based on progress (starts at 20px, goes to 0px)
   const blurAmount = 20 - (progress / 100) * 20;
   const opacity = 0.95 - (progress / 100) * 0.95;
+  // Logo fades out as progress increases (starts at 1, goes to 0)
+  const logoOpacity = 1 - (progress / 100);
 
   return (
     <div 
@@ -40,12 +42,16 @@ const PreviewLoader = ({ onComplete, onProgress }) => {
         backgroundColor: `rgba(41, 41, 41, ${opacity})`
       }}
     >
-      {/* Logo with fade-in animation */}
+      {/* Logo with fade-in and fade-out animation */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        animate={{ 
+          opacity: logoOpacity > 0.1 ? logoOpacity : 0,
+          scale: 1 
+        }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         className="mb-12"
+        style={{ opacity: logoOpacity }}
       >
         <img
           src={logoImage}
