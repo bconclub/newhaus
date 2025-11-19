@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/shared/ScrollToTop';
 import PreviewLoader from './components/shared/PreviewLoader';
@@ -11,40 +11,59 @@ import PropertyDetail from './pages/PropertyDetail';
 import Contact from './pages/Contact';
 import ThankYou from './pages/ThankYou';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   const [showPreview, setShowPreview] = useState(false);
+  const [loaderProgress, setLoaderProgress] = useState(0);
 
   useEffect(() => {
-    // Check if preview has been shown in this session
-    const previewShown = sessionStorage.getItem('previewShown');
-    if (!previewShown) {
+    // Show preloader on every homepage load/reload
+    if (location.pathname === '/') {
       setShowPreview(true);
+      setLoaderProgress(0);
     }
-  }, []);
+  }, [location.pathname]);
 
   const handlePreviewComplete = () => {
-    sessionStorage.setItem('previewShown', 'true');
     setShowPreview(false);
+    setLoaderProgress(0);
+  };
+
+  const handleProgress = (progress) => {
+    setLoaderProgress(progress);
   };
 
   return (
     <>
-      {showPreview && <PreviewLoader onComplete={handlePreviewComplete} />}
-      <Router>
-        <ScrollToTop />
+      {showPreview && <PreviewLoader onComplete={handlePreviewComplete} onProgress={handleProgress} />}
+      <div 
+        className={showPreview ? 'transition-all duration-200' : ''}
+        style={showPreview ? { 
+          pointerEvents: 'none'
+        } : {}}
+      >
         <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/properties" element={<Properties />} />
-            <Route path="/properties/:slug" element={<PropertyDetail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/thank-you" element={<ThankYou />} />
-          </Routes>
-        </Layout>
-      </Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/properties/:slug" element={<PropertyDetail />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/thank-you" element={<ThankYou />} />
+        </Routes>
+      </Layout>
+      </div>
     </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <AppContent />
+    </Router>
   );
 }
 

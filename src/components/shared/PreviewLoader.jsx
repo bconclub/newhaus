@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import logoImage from '../../assets/Newhaus logo.webp';
 
-const PreviewLoader = ({ onComplete }) => {
+const PreviewLoader = ({ onComplete, onProgress }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -13,23 +13,33 @@ const PreviewLoader = ({ onComplete }) => {
 
     const timer = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
+        const newProgress = prev + increment;
+        if (newProgress >= 100) {
           clearInterval(timer);
-          // Wait a bit after reaching 100% before calling onComplete
-          setTimeout(() => {
-            onComplete();
-          }, 100);
+          if (onProgress) onProgress(100);
+          onComplete();
           return 100;
         }
-        return prev + increment;
+        if (onProgress) onProgress(newProgress);
+        return newProgress;
       });
     }, interval);
 
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, [onComplete, onProgress]);
+
+  // Calculate blur based on progress (starts at 20px, goes to 0px)
+  const blurAmount = 20 - (progress / 100) * 20;
+  const opacity = 0.95 - (progress / 100) * 0.95;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-nh-charcoal flex flex-col items-center justify-center">
+    <div 
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-opacity duration-300"
+      style={{ 
+        backdropFilter: `blur(${blurAmount}px)`,
+        backgroundColor: `rgba(41, 41, 41, ${opacity})`
+      }}
+    >
       {/* Logo with fade-in animation */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
