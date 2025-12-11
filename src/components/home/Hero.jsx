@@ -24,10 +24,36 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
           <h1 className="text-6xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-6 leading-tight md:leading-normal">
-            Find Your New<span className="text-nh-copper">Haus</span>
+            {["Find", "Your", "New"].map((word, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.5 + index * 0.2,
+                  ease: "easeOut"
+                }}
+                className="inline-block mr-2"
+              >
+                {word}
+              </motion.span>
+            ))}
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.5 + 3 * 0.2,
+                ease: "easeOut"
+              }}
+              className="text-nh-copper inline-block"
+            >
+              Haus
+            </motion.span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-nh-cream mb-8 max-w-3xl mx-auto">
             Stop scrolling and find the right home

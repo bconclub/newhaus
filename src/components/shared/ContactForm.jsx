@@ -69,7 +69,7 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
         navigate('/thank-you');
       }
     } catch (err) {
-      setError('Unable to submit. Please try again or call us at +91 98765 43210');
+      setError('Unable to submit. Please try again or call us at +91 96320 04011');
       setIsSubmitting(false);
     }
   };
@@ -132,7 +132,7 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
             },
           })}
           className="w-full px-4 py-3 bg-nh-charcoal border border-gray-600 text-white rounded-md focus:ring-2 focus:ring-nh-copper focus:border-nh-copper placeholder-gray-400"
-          placeholder="+91 98765 43210"
+          placeholder="+91 96320 04011"
         />
         {errors.phone && (
           <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
