@@ -7,8 +7,13 @@ import Modal from '../components/shared/Modal';
 import SignupForm from '../components/shared/SignupForm';
 import Button from '../components/shared/Button';
 import heroImage002 from '../assets/New Haus 002.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const Properties = () => {
+  useMetaTags(
+    'Curated Properties - NewHaus Bangalore',
+    'Every home handpicked for exceptional design and investment value. Explore our curated selection of luxury properties in Bangalore.'
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);

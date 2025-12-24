@@ -3,8 +3,13 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import ContactForm from '../components/shared/ContactForm';
 import SectionHeader from '../components/shared/SectionHeader';
 import heroImage003 from '../assets/New Haus 003.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const Contact = () => {
+  useMetaTags(
+    'Contact NewHaus - Let\'s Find Your New Home',
+    'Tell us what you\'re looking for, and we\'ll curate the perfect options for you. Get in touch with NewHaus for personalized property recommendations in Bangalore.'
+  );
   const contactInfo = [
     {
       icon: Phone,

@@ -3,8 +3,13 @@ import { CheckCircle } from 'lucide-react';
 import SectionHeader from '../components/shared/SectionHeader';
 import Button from '../components/shared/Button';
 import heroImage004 from '../assets/New Haus 004.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const About = () => {
+  useMetaTags(
+    'About NewHaus - Home Curators in Bangalore',
+    'Founded by professionals who\'ve experienced the frustration of Bangalore\'s property hunt firsthand. We evaluate properties with an eye for design quality, spatial intelligence, and long-term value.'
+  );
   const approaches = [
     'We visit every property ourselves',
     'We analyze investment potential with data',

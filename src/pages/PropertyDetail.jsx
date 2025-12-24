@@ -9,6 +9,7 @@ import Button from '../components/shared/Button';
 import Modal from '../components/shared/Modal';
 import Tabs from '../components/shared/Tabs';
 import fallbackImage001 from '../assets/New Haus 001.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const PropertyDetail = () => {
   const { slug } = useParams();
@@ -17,6 +18,14 @@ const PropertyDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const property = properties.find((p) => p.slug === slug);
+
+  // Set dynamic meta tags based on property
+  useMetaTags(
+    property ? `${property.name} - ${property.location} | NewHaus` : 'Property Details - NewHaus',
+    property 
+      ? `${property.tagline}. ${property.description.substring(0, 120)}... Located in ${property.location}. Starting at ${property.price}.`
+      : 'Explore this exceptional property in Bangalore with NewHaus.'
+  );
 
   // Scroll to top when property changes
   useEffect(() => {

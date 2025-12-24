@@ -6,8 +6,13 @@ import heroImage001 from '../assets/New Haus 001.webp';
 import heroImage002 from '../assets/New Haus 002.webp';
 import heroImage003 from '../assets/New Haus 003.webp';
 import heroImage004 from '../assets/New Haus 004.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const Services = () => {
+  useMetaTags(
+    'Services - NewHaus Complete Home-Buying Experience',
+    'From property curation to closing, we\'re with you every step of the way. Services include property curation, guided site visits, investment advisory, NRI services, and documentation support.'
+  );
   const services = [
     {
       icon: Sparkles,

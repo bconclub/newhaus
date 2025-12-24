@@ -3,8 +3,13 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
 import Button from '../components/shared/Button';
 import heroImage001 from '../assets/New Haus 001.webp';
+import { useMetaTags } from '../utils/useMetaTags';
 
 const ThankYou = () => {
+  useMetaTags(
+    'Thank You - NewHaus',
+    'Thank you for contacting NewHaus. We\'ve received your inquiry and will get back to you within 24 hours.'
+  );
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const formType = searchParams.get('form') || 'contact';
