@@ -76,6 +76,18 @@ const SignupForm = ({ onSuccess }) => {
     }
   }, [formData]);
 
+  // Clean payload - remove empty strings and undefined values
+  const cleanPayload = (data) => {
+    const cleaned = {};
+    for (const [key, value] of Object.entries(data)) {
+      // Keep the field if it has a meaningful value (not empty string, null, or undefined)
+      if (value !== '' && value !== null && value !== undefined) {
+        cleaned[key] = value;
+      }
+    }
+    return cleaned;
+  };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setError('');
@@ -83,18 +95,30 @@ const SignupForm = ({ onSuccess }) => {
     const utmParams = getUTMParams();
     const pageName = getPageName();
 
+    // Clean the form data before building payload
+    const cleanedData = cleanPayload(data);
+    console.log('Original form data:', data);
+    console.log('Cleaned form data:', cleanedData);
+
     const payload = {
-      ...data,
+      ...cleanedData,
       form_type: 'signup',
       submitted_at: new Date().toISOString(),
       source_page: window.location.href,
       page_name: pageName,
-      ...utmParams,
+      ...cleanPayload(utmParams), // Also clean UTM params
     };
 
+    // Log payload for debugging (remove in production if needed)
+    console.log('Final payload being sent:', payload);
+    console.log('Payload JSON:', JSON.stringify(payload, null, 2));
+
     try {
-      // Webhook URL - use environment variable or default to production webhook
-      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://build.goproxe.com/webhook/newhaus-website';
+      // Webhook URL - use environment variable, proxy in dev, or default to production webhook
+      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 
+        (import.meta.env.DEV 
+          ? '/api/webhook' 
+          : 'https://build.goproxe.com/webhook/newhaus-website');
 
       // Create AbortController for timeout
       const controller = new AbortController();
@@ -107,14 +131,66 @@ const SignupForm = ({ onSuccess }) => {
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
+        mode: 'cors', // Explicitly set CORS mode
+      }).catch((fetchError) => {
+        // Clear timeout if fetch fails before response
+        clearTimeout(timeoutId);
+        // Re-throw with more context
+        console.error('Fetch error details:', {
+          error: fetchError,
+          webhookUrl,
+          message: fetchError.message,
+        });
+        throw fetchError;
       });
 
       clearTimeout(timeoutId);
 
+      // Read response body - read as text first to avoid "body stream already read" error
+      let responseData;
+      const textResponse = await response.text();
+      try {
+        responseData = JSON.parse(textResponse);
+        console.log('Webhook response:', responseData);
+      } catch (parseError) {
+        // If response is not JSON, check if it's HTML
+        if (textResponse.trim().startsWith('<!DOCTYPE') || textResponse.trim().startsWith('<html')) {
+          // Extract error message from HTML if possible
+          const errorMatch = textResponse.match(/<pre[^>]*>([^<]+)<\/pre>/i) || 
+                            textResponse.match(/<title[^>]*>([^<]+)<\/title>/i);
+          const htmlError = errorMatch ? errorMatch[1].trim() : 'Internal Server Error';
+          console.log('Webhook response (HTML error):', htmlError);
+          responseData = { message: htmlError, isHtml: true };
+        } else {
+          // Plain text response
+          console.log('Webhook response (text):', textResponse);
+          responseData = { message: textResponse };
+        }
+      }
+
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Webhook error:', response.status, errorText);
-        throw new Error(`Submission failed: ${response.status} ${response.statusText}`);
+        console.error('Webhook error:', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          responseData: responseData,
+          payload: payload,
+          webhookUrl: webhookUrl
+        });
+        
+        // Extract a clean error message
+        let errorMessage = 'Internal Server Error';
+        if (responseData?.message && !responseData.isHtml) {
+          errorMessage = responseData.message;
+        } else if (responseData?.error) {
+          errorMessage = responseData.error;
+        } else if (response.status === 500) {
+          errorMessage = 'Server error. Please try again later or contact us directly.';
+        } else {
+          errorMessage = response.statusText || 'Unknown error';
+        }
+        
+        throw new Error(`Submission failed: ${response.status} ${errorMessage}`);
       }
 
       // Clear saved form data on successful submission
@@ -129,11 +205,25 @@ const SignupForm = ({ onSuccess }) => {
       }
     } catch (err) {
       console.error('Form submission error:', err);
+      console.error('Error details:', {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+        webhookUrl: import.meta.env.VITE_WEBHOOK_URL || 
+          (import.meta.env.DEV 
+            ? '/api/webhook' 
+            : 'https://build.goproxe.com/webhook/newhaus-website')
+      });
+      
       // Check for different error types
       if (err.name === 'AbortError') {
         setError('Request timed out. Please check your connection and try again, or call us at +91 96320 04011');
-      } else if (err instanceof TypeError && err.message.includes('fetch')) {
+      } else if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('Failed to fetch'))) {
+        // More specific network error handling
         setError('Network error. Please check your connection and try again, or call us at +91 96320 04011');
+      } else if (err.message && err.message.includes('Submission failed')) {
+        // Server returned an error status
+        setError(`Unable to submit. ${err.message}. Please try again or call us at +91 96320 04011`);
       } else {
         setError('Unable to submit. Please try again or call us at +91 96320 04011');
       }

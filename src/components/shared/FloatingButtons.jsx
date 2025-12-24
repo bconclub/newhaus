@@ -3,7 +3,7 @@ import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { properties } from '../../data/properties';
 import Modal from './Modal';
-import ContactForm from './ContactForm';
+import SignupForm from './SignupForm';
 
 const STORAGE_KEY = 'newhaus_contact_form_data';
 
@@ -114,8 +114,7 @@ const FloatingButtons = () => {
         onClose={() => setIsEnquireModalOpen(false)}
         title={modalTitle}
       >
-        <ContactForm
-          propertyInterest={propertyName}
+        <SignupForm
           onSuccess={handleEnquireSuccess}
         />
       </Modal>

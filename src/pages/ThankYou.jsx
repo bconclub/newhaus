@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
 import Button from '../components/shared/Button';
-import heroImage001 from '../assets/New Haus 001.webp';
 import { useMetaTags } from '../utils/useMetaTags';
 
 const ThankYou = () => {
@@ -13,7 +12,6 @@ const ThankYou = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const formType = searchParams.get('form') || 'contact';
-  const previousPage = searchParams.get('from') || '/';
 
   // Get form-specific message
   const getFormMessage = () => {
@@ -28,66 +26,16 @@ const ThankYou = () => {
     }
   };
 
-  // Navigation options based on previous page
-  const getNavigationOptions = () => {
-    const options = [
-      { path: '/', label: 'Home' },
-      { path: '/properties', label: 'Properties' },
-      { path: '/about', label: 'About' },
-      { path: '/services', label: 'Services' },
-    ];
-
-    // Add previous page if it's not already in the list and is a valid page
-    if (previousPage && previousPage !== '/' && previousPage !== '/thank-you') {
-      // Check if previous page is already in options
-      const isAlreadyIncluded = options.some(opt => opt.path === previousPage);
-      if (!isAlreadyIncluded) {
-        // Get a friendly name for the page
-        let pageLabel = 'Previous Page';
-        if (previousPage.startsWith('/properties/')) {
-          pageLabel = 'Back to Property';
-        } else if (previousPage === '/contact') {
-          pageLabel = 'Back to Contact';
-        } else {
-          const pageName = previousPage.split('/').pop() || '';
-          pageLabel = `Back to ${pageName.charAt(0).toUpperCase() + pageName.slice(1)}`;
-        }
-        options.push({ path: previousPage, label: pageLabel });
-      }
-    }
-
-    return options;
-  };
+  // Simple navigation options
+  const navigationOptions = [
+    { path: '/', label: 'Home' },
+    { path: '/properties', label: 'Properties' },
+  ];
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center bg-nh-charcoal overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-          style={{
-            backgroundImage: `url(${heroImage001})`
-          }}
-        />
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-nh-charcoal/60" />
-        {/* Content */}
-        <div className="container mx-auto px-6 md:px-4 text-center relative z-10 pt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 drop-shadow-2xl">
-              Thank You!
-            </h1>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Content Section */}
-      <section className="min-h-[60vh] flex items-center justify-center bg-nh-charcoal py-20">
+      <section className="min-h-[80vh] flex items-center justify-center bg-nh-charcoal py-20 pt-32">
         <div className="container mx-auto px-6 md:px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -151,8 +99,8 @@ const ThankYou = () => {
                 Go Back
               </Button>
               
-              {/* Other Navigation Options */}
-              {getNavigationOptions().map((option) => (
+              {/* Navigation Options */}
+              {navigationOptions.map((option) => (
                 <Button
                   key={option.path}
                   to={option.path}
