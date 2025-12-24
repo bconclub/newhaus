@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoImage from '../../assets/Newhaus logo.webp';
+import Modal from '../shared/Modal';
+import SignupForm from '../shared/SignupForm';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,12 +67,12 @@ const Header = () => {
                 {link.name}
               </Link>
             ))}
-            <Link
-              to="/contact"
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="bg-nh-copper text-white px-6 py-2 rounded-md hover:bg-nh-orange transition-colors"
             >
-              Get Started
-            </Link>
+              Start Exploring
+            </button>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -97,15 +101,31 @@ const Header = () => {
                 {link.name}
               </Link>
             ))}
-            <Link
-              to="/contact"
-              className="block mx-4 mt-2 text-center bg-nh-copper text-white px-6 py-3 rounded-md hover:bg-nh-orange transition-colors"
+            <button
+              onClick={() => {
+                setIsModalOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+              className="block mx-4 mt-2 text-center bg-nh-copper text-white px-6 py-3 rounded-md hover:bg-nh-orange transition-colors w-[calc(100%-2rem)]"
             >
-              Get Started
-            </Link>
+              Start Exploring
+            </button>
           </nav>
         )}
       </div>
+
+      {/* Sign Up Form Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Start Exploring"
+      >
+        <SignupForm onSuccess={() => {
+          setIsModalOpen(false);
+          const previousPage = location.pathname;
+          navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
+        }} />
+      </Modal>
     </header>
   );
 };

@@ -30,9 +30,21 @@ const Footer = () => {
               alt="NewHaus"
               className="h-20 mb-4 w-auto"
             />
-            <p className="text-nh-cream text-sm">
+            <p className="text-nh-cream text-sm mb-4">
               Curating Exceptional Homes in Bangalore
             </p>
+            <div className="flex gap-4">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="text-nh-cream hover:text-nh-copper transition-colors"
+                >
+                  <social.icon size={20} />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Middle Column - Quick Links */}
@@ -80,23 +92,13 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Social Media & Copyright */}
+        {/* Bottom Section - Copyright */}
         <div className="border-t border-nh-grey mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex gap-4 mb-4 md:mb-0">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                aria-label={social.label}
-                className="text-nh-cream hover:text-nh-copper transition-colors"
-              >
-                <social.icon size={20} />
-              </a>
-            ))}
-          </div>
-
-          <p className="text-nh-cream text-sm">
+          <p className="text-nh-cream text-sm mb-6 md:mb-0">
             © {currentYear} NewHaus. All rights reserved.
+          </p>
+          <p className="text-nh-cream text-sm">
+            Built with ❤️ at <a href="https://bconclub.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-nh-copper transition-colors">BCON Club</a>
           </p>
         </div>
       </div>

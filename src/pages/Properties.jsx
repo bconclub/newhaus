@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { properties } from '../data/properties';
 import PropertyCard from '../components/shared/PropertyCard';
@@ -8,6 +9,8 @@ import Button from '../components/shared/Button';
 import heroImage002 from '../assets/New Haus 002.webp';
 
 const Properties = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   
@@ -26,6 +29,8 @@ const Properties = () => {
     setFormSubmitted(true);
     localStorage.setItem('propertiesFormSubmitted', 'true');
     setIsModalOpen(false);
+    const previousPage = location.pathname;
+    navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
   };
 
   return (

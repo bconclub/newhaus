@@ -10,11 +10,22 @@ import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
 import Contact from './pages/Contact';
 import ThankYou from './pages/ThankYou';
+import { initUTMTracking } from './utils/utmTracking';
 
 function AppContent() {
   const location = useLocation();
   const [showPreview, setShowPreview] = useState(false);
   const [loaderProgress, setLoaderProgress] = useState(0);
+
+  useEffect(() => {
+    // Initialize UTM tracking on app load
+    initUTMTracking();
+  }, []);
+
+  useEffect(() => {
+    // Re-initialize UTM tracking when location changes (to capture new UTM params)
+    initUTMTracking();
+  }, [location]);
 
   useEffect(() => {
     // Show preloader on every homepage load/reload
@@ -37,10 +48,7 @@ function AppContent() {
     <>
       {showPreview && <PreviewLoader onComplete={handlePreviewComplete} onProgress={handleProgress} />}
       <div 
-        className={showPreview ? 'transition-all duration-200' : ''}
-        style={showPreview ? { 
-          pointerEvents: 'none'
-        } : {}}
+        className={showPreview ? 'pointer-events-none' : 'pointer-events-auto'}
       >
         <Layout>
         <Routes>

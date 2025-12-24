@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Tag, CheckCircle, Calendar, Download } from 'lucide-react';
 import { properties } from '../data/properties';
 import ContactForm from '../components/shared/ContactForm';
+import BookSiteVisitForm from '../components/shared/BookSiteVisitForm';
 import Button from '../components/shared/Button';
 import Modal from '../components/shared/Modal';
 import Tabs from '../components/shared/Tabs';
@@ -11,7 +12,10 @@ import fallbackImage001 from '../assets/New Haus 001.webp';
 
 const PropertyDetail = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const property = properties.find((p) => p.slug === slug);
 
   // Scroll to top when property changes
@@ -669,12 +673,40 @@ const PropertyDetail = () => {
           propertyInterest={property.name} 
           onSuccess={() => {
             setIsModalOpen(false);
-            setTimeout(() => {
-              window.location.href = '/thank-you';
-            }, 500);
+            const previousPage = location.pathname;
+            navigate(`/thank-you?form=contact&from=${encodeURIComponent(previousPage)}`);
           }}
         />
       </Modal>
+
+      {/* Book Site Visit Modal */}
+      <Modal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        title="Book a Site Visit"
+      >
+        <BookSiteVisitForm 
+          propertyInterest={property.name} 
+          onSuccess={() => {
+            setIsBookingModalOpen(false);
+            const previousPage = location.pathname;
+            navigate(`/thank-you?form=site-visit&from=${encodeURIComponent(previousPage)}`);
+          }}
+        />
+      </Modal>
+
+      {/* Floating Book Site Visit Button */}
+      <div className="fixed bottom-4 left-0 right-0 z-40 flex justify-center md:bottom-6">
+        <div className="w-auto">
+          <button
+            onClick={() => setIsBookingModalOpen(true)}
+            className="inline-flex items-center justify-center w-auto bg-black border border-nh-copper text-nh-copper hover:bg-nh-charcoal hover:border-nh-orange hover:text-nh-orange px-3 py-2 md:px-6 md:py-3 text-sm md:text-lg font-heading font-semibold shadow-lg rounded-lg transition-all duration-300"
+          >
+            <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1.5 md:mr-2" />
+            Visit Property
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
