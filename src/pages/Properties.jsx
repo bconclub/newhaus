@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { properties } from '../data/properties';
 import PropertyCard from '../components/shared/PropertyCard';
@@ -14,8 +13,6 @@ const Properties = () => {
     'Curated Properties - NewHaus Bangalore',
     'Every home handpicked for exceptional design and investment value. Explore our curated selection of luxury properties in Bangalore.'
   );
-  const navigate = useNavigate();
-  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   
@@ -34,8 +31,7 @@ const Properties = () => {
     setFormSubmitted(true);
     localStorage.setItem('propertiesFormSubmitted', 'true');
     setIsModalOpen(false);
-    const previousPage = location.pathname;
-    navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
+    // Property unlocks and stays on the same page - no redirect to thank you page
   };
 
   return (

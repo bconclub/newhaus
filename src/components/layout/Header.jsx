@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoImage from '../../assets/Newhaus logo.webp';
 import Modal from '../shared/Modal';
-import SignupForm from '../shared/SignupForm';
+import ContactForm from '../shared/ContactForm';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -114,16 +114,16 @@ const Header = () => {
         )}
       </div>
 
-      {/* Sign Up Form Modal */}
+      {/* Start Exploring Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Start Exploring"
       >
-        <SignupForm onSuccess={() => {
+        <ContactForm onSuccess={() => {
           setIsModalOpen(false);
           const previousPage = location.pathname;
-          navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
+          navigate(`/thank-you?form=contact&from=${encodeURIComponent(previousPage)}`);
         }} />
       </Modal>
     </header>

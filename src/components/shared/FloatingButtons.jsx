@@ -3,7 +3,7 @@ import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { properties } from '../../data/properties';
 import Modal from './Modal';
-import SignupForm from './SignupForm';
+import ContactForm from './ContactForm';
 
 const STORAGE_KEY = 'newhaus_contact_form_data';
 
@@ -76,7 +76,7 @@ const FloatingButtons = () => {
     navigate(`/thank-you?form=contact&from=${encodeURIComponent(previousPage)}`);
   };
 
-  const modalTitle = propertyName ? `Get a callback - ${propertyName}` : 'Get a callback';
+  const modalTitle = propertyName ? `Call back - ${propertyName}` : 'Call back';
 
   return (
     <>
@@ -108,13 +108,14 @@ const FloatingButtons = () => {
         </button>
       </div>
 
-      {/* Enquire Modal */}
+      {/* Call back Modal */}
       <Modal
         isOpen={isEnquireModalOpen}
         onClose={() => setIsEnquireModalOpen(false)}
         title={modalTitle}
       >
-        <SignupForm
+        <ContactForm
+          propertyInterest={propertyName}
           onSuccess={handleEnquireSuccess}
         />
       </Modal>
