@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, ArrowLeft } from 'lucide-react';
 import Button from '../components/shared/Button';
 import heroImage001 from '../assets/New Haus 001.webp';
 
@@ -15,6 +15,8 @@ const ThankYou = () => {
     switch (formType) {
       case 'signup':
         return "Thank you for signing up! We're excited to help you explore your dream home.";
+      case 'site-visit':
+        return "Thank you for booking a site visit! We've received your request and will confirm the details with you shortly.";
       case 'contact':
       default:
         return "Thank you for reaching out! We've received your inquiry and will get back to you within 24 hours.";
@@ -133,6 +135,18 @@ const ThankYou = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
+              {/* Browser Back Button */}
+              <Button
+                onClick={() => navigate(-1)}
+                variant="secondary"
+                size="md"
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Go Back
+              </Button>
+              
+              {/* Other Navigation Options */}
               {getNavigationOptions().map((option) => (
                 <Button
                   key={option.path}

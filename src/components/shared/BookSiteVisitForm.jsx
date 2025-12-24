@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, Clock } from 'lucide-react';
 import { properties } from '../../data/properties';
 import { getStoredUTMParams } from '../../utils/utmTracking';
@@ -11,6 +11,7 @@ const CONTACT_FORM_STORAGE_KEY = 'newhaus_contact_form_data';
 
 const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { slug } = useParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -148,27 +149,47 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
       // Webhook URL - use environment variable or default to production webhook
       const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://build.goproxe.com/webhook/newhaus-website';
 
+      // Create AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error('Submission failed');
+        const errorText = await response.text();
+        console.error('Webhook error:', response.status, errorText);
+        throw new Error(`Submission failed: ${response.status} ${response.statusText}`);
       }
 
       // Clear saved form data on successful submission
       clearSavedFormData();
 
-      // Success - call onSuccess callback
+      // Success - navigate to thank you page or call onSuccess callback
       if (onSuccess) {
         onSuccess();
+      } else {
+        const previousPage = location.pathname;
+        navigate(`/thank-you?form=site-visit&from=${encodeURIComponent(previousPage)}`);
       }
     } catch (err) {
-      setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      console.error('Form submission error:', err);
+      // Check for different error types
+      if (err.name === 'AbortError') {
+        setError('Request timed out. Please check your connection and try again, or call us at +91 96320 04011');
+      } else if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again, or call us at +91 96320 04011');
+      } else {
+        setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      }
       setIsSubmitting(false);
     }
   };

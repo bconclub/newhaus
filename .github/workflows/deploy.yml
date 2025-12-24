@@ -33,6 +33,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           local-dir: ./dist/
-          server-dir: /home/u386088295/domains/newhaus.in/public_html/
+          server-dir: /public_html/
           dangerous-clean-slate: true
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { CheckCircle } from 'lucide-react';
 import { properties } from '../../data/properties';
 import { getStoredUTMParams } from '../../utils/utmTracking';
 import Button from './Button';
@@ -8,11 +9,11 @@ import Button from './Button';
 const STORAGE_KEY = 'newhaus_contact_form_data';
 
 const ContactForm = ({ propertyInterest = '', onSuccess }) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { slug } = useParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // Auto-detect property from URL or use prop
   const detectedProperty = slug ? properties.find(p => p.slug === slug) : null;
@@ -68,6 +69,7 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: savedData,
@@ -103,33 +105,73 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
       // Webhook URL - use environment variable or default to production webhook
       const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://build.goproxe.com/webhook/newhaus-website';
 
+      // Create AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error('Submission failed');
+        const errorText = await response.text();
+        console.error('Webhook error:', response.status, errorText);
+        throw new Error(`Submission failed: ${response.status} ${response.statusText}`);
       }
 
       // Clear saved form data on successful submission
       clearSavedFormData();
 
-      // Success - navigate to thank you page or call onSuccess callback
+      // Success - show message on page or call onSuccess callback
       if (onSuccess) {
         onSuccess();
       } else {
-        const previousPage = location.pathname;
-        navigate(`/thank-you?form=contact&from=${encodeURIComponent(previousPage)}`);
+        // Show success message on the same page (for contact page)
+        setIsSuccess(true);
+        setIsSubmitting(false);
+        // Reset form
+        reset();
       }
     } catch (err) {
-      setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      console.error('Form submission error:', err);
+      // Check for different error types
+      if (err.name === 'AbortError') {
+        setError('Request timed out. Please check your connection and try again, or call us at +91 96320 04011');
+      } else if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again, or call us at +91 96320 04011');
+      } else {
+        setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      }
       setIsSubmitting(false);
     }
   };
+
+  // Show success message instead of form
+  if (isSuccess) {
+    return (
+      <div className="bg-nh-grey p-8 rounded-lg border border-nh-copper/20 text-center">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-10 h-10 text-green-600" />
+        </div>
+        <h3 className="text-2xl font-heading font-bold text-white mb-3">
+          Thank You!
+        </h3>
+        <p className="text-lg text-gray-300 mb-4">
+          We'll get back to you at the earliest.
+        </p>
+        <p className="text-sm text-gray-400">
+          We've received your inquiry and will respond within 24 hours.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

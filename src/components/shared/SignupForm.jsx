@@ -96,16 +96,25 @@ const SignupForm = ({ onSuccess }) => {
       // Webhook URL - use environment variable or default to production webhook
       const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 'https://build.goproxe.com/webhook/newhaus-website';
 
+      // Create AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error('Submission failed');
+        const errorText = await response.text();
+        console.error('Webhook error:', response.status, errorText);
+        throw new Error(`Submission failed: ${response.status} ${response.statusText}`);
       }
 
       // Clear saved form data on successful submission
@@ -119,7 +128,15 @@ const SignupForm = ({ onSuccess }) => {
         navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
       }
     } catch (err) {
-      setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      console.error('Form submission error:', err);
+      // Check for different error types
+      if (err.name === 'AbortError') {
+        setError('Request timed out. Please check your connection and try again, or call us at +91 96320 04011');
+      } else if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again, or call us at +91 96320 04011');
+      } else {
+        setError('Unable to submit. Please try again or call us at +91 96320 04011');
+      }
       setIsSubmitting(false);
     }
   };

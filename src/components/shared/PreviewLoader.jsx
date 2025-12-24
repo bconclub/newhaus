@@ -76,24 +76,44 @@ const PreviewLoader = ({ onComplete, onProgress }) => {
       ease: [0.43, 0.13, 0.23, 0.96], // Very smooth easing curve
       onUpdate: (latest) => {
         if (onProgress) onProgress(latest);
+        // #region agent log
+        if (latest >= 80 && latest <= 100) {
+          fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:77',message:'Progress update - tracking bgOpacity',data:{progress:latest,bgOpacityValue:bgOpacity.get(),isExiting},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'F'})}).catch(()=>{});
+        }
+        // #endregion
         // Start hiding when progress reaches 85% - logo and bar should be gone by 100%
         if (latest >= 85 && !isExiting) {
+          // #region agent log
+          fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:80',message:'Progress >= 85% - setting isExiting',data:{progress:latest,isExiting,bgOpacityValue:bgOpacity.get()},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'C'})}).catch(()=>{});
+          // #endregion
           shouldRenderRef.current = false;
           flushSync(() => {
             setIsExiting(true);
           });
+          // #region agent log
+          setTimeout(()=>{const el=document.querySelector('[class*="z-[9999]"]');fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:87',message:'After setIsExiting - checking DOM',data:{isExiting:true,elementExists:!!el,computedBg:el?getComputedStyle(el).backgroundColor:'none',computedOpacity:el?getComputedStyle(el).opacity:'none'},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'F'})}).catch(()=>{});},10);
+          // #endregion
         }
       },
       onComplete: () => {
         if (onProgress) onProgress(100);
         // Logo and bar should already be faded out by now (started at 70%, gone by 100%)
         // Just hide the component completely
+        // #region agent log
+        fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:87',message:'Animation onComplete - before state changes',data:{isExiting,isHidden,shouldRender:shouldRenderRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B,C,D'})}).catch(()=>{});
+        // #endregion
         shouldRenderRef.current = false;
         flushSync(() => {
           setIsHidden(true);
         });
+        // #region agent log
+        fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:95',message:'After setIsHidden(true) - calling onComplete',data:{isHidden:true,shouldRender:shouldRenderRef.current,preloaderInDOM:!!document.querySelector('[class*="z-[9999]"]')},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B,D'})}).catch(()=>{});
+        // #endregion
         // Call onComplete to remove component from DOM
         onComplete();
+        // #region agent log
+        setTimeout(()=>{fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:97',message:'After onComplete() call',data:{preloaderInDOM:!!document.querySelector('[class*="z-[9999]"]'),wrapperDiv:document.querySelector('div[class*="pointer-events"]')?.className},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B'})}).catch(()=>{});},50);
+        // #endregion
       }
     });
 
@@ -118,22 +138,66 @@ const PreviewLoader = ({ onComplete, onProgress }) => {
 
   // Removed separate exit useEffect - now handled directly in progress onComplete
 
-  const backgroundColor = useTransform(bgOpacity, (v) => `rgba(41, 41, 41, ${v})`);
+  // Background color - use motion value we can control directly, start transparent to prevent dark flash
+  const bgColorMotion = useMotionValue('rgba(41, 41, 41, 0.95)');
+  
+  // Update background color based on bgOpacity, but force to transparent when exiting or when progress is high
+  useEffect(() => {
+    if (isExiting) {
+      // Immediately set to transparent when exiting
+      bgColorMotion.set('transparent');
+      // #region agent log
+      fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:146',message:'isExiting=true - forcing bg to transparent',data:{isExiting,bgOpacityValue:bgOpacity.get(),progressValue:progress.get()},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'F'})}).catch(()=>{});
+      // #endregion
+    } else {
+      const unsubscribe = bgOpacity.on('change', (latest) => {
+        const currentProgress = progress.get();
+        // Force transparent when progress is above 80% to prevent dark background
+        if (currentProgress >= 80) {
+          bgColorMotion.set('transparent');
+        } else {
+          bgColorMotion.set(`rgba(41, 41, 41, ${latest})`);
+        }
+      });
+      // Also listen to progress changes to catch when it goes above 80%
+      const progressUnsubscribe = progress.on('change', (latest) => {
+        if (latest >= 80 && !isExiting) {
+          bgColorMotion.set('transparent');
+        }
+      });
+      return () => {
+        unsubscribe();
+        progressUnsubscribe();
+      };
+    }
+  }, [isExiting, bgOpacity, bgColorMotion, progress]);
+  
+  const backgroundColorTransform = bgColorMotion;
 
-  // Don't render if ref says not to, or if completely hidden
-  if (!shouldRenderRef.current || isHidden) {
+  // Don't render if ref says not to, or if completely hidden, or if exiting (unmount immediately)
+  // #region agent log
+  useEffect(()=>{if(!shouldRenderRef.current||isHidden||isExiting){fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:140',message:'Returning null - component should unmount',data:{shouldRender:shouldRenderRef.current,isHidden,isExiting,preloaderInDOM:!!document.querySelector('[class*="z-[9999]"]')},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B,E'})}).catch(()=>{});}},[isHidden,isExiting]);
+  // #endregion
+  if (!shouldRenderRef.current || isHidden || isExiting) {
     return null;
   }
 
+  // #region agent log
+  const pointerEventsValue = isExiting || isHidden ? 'none' : 'auto';
+  useEffect(()=>{fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PreviewLoader.jsx:136',message:'Rendering overlay with pointerEvents',data:{isExiting,isHidden,pointerEvents:pointerEventsValue,shouldRender:shouldRenderRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});},[isExiting,isHidden]);
+  // #endregion
+  // Remove backdrop filter when exiting to prevent dark blur
+  const finalBackdropFilter = isExiting ? 'none' : backdropFilter;
+  
   return (
     <motion.div 
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
       style={{ 
-        backdropFilter,
-        backgroundColor,
+        backdropFilter: finalBackdropFilter,
+        backgroundColor: backgroundColorTransform,
         opacity: containerOpacity,
         y: yTransform,
-        pointerEvents: isExiting || isHidden ? 'none' : 'auto'
+        pointerEvents: pointerEventsValue
       }}
     >
       {/* Logo with fade-in animation */}
