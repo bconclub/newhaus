@@ -3,7 +3,7 @@ import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion';
 import { MapPin, Tag, CheckCircle, Calendar, Download } from 'lucide-react';
 import { properties } from '../data/properties';
-import ContactForm from '../components/shared/ContactForm';
+import SignupForm from '../components/shared/SignupForm';
 import BookSiteVisitForm from '../components/shared/BookSiteVisitForm';
 import Button from '../components/shared/Button';
 import Modal from '../components/shared/Modal';
@@ -678,12 +678,12 @@ const PropertyDetail = () => {
         onClose={() => setIsModalOpen(false)}
         title="Schedule a Viewing"
       >
-        <ContactForm 
-          propertyInterest={property.name} 
+        <SignupForm 
+          formSource="Sign Up"
           onSuccess={() => {
             setIsModalOpen(false);
             const previousPage = location.pathname;
-            navigate(`/thank-you?form=contact&from=${encodeURIComponent(previousPage)}`);
+            navigate(`/thank-you?form=signup&from=${encodeURIComponent(previousPage)}`);
           }}
         />
       </Modal>
@@ -695,7 +695,8 @@ const PropertyDetail = () => {
         title="Book a Site Visit"
       >
         <BookSiteVisitForm 
-          propertyInterest={property.name} 
+          propertyInterest={property.name}
+          formSource="Book Site Visit"
           onSuccess={() => {
             setIsBookingModalOpen(false);
             const previousPage = location.pathname;

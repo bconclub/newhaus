@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import { properties } from '../../data/properties';
-import { getStoredUTMParams } from '../../utils/utmTracking';
+import { getAllTrackingData } from '../../utils/utmTracking';
 import Button from './Button';
 
 const STORAGE_KEY = 'newhaus_contact_form_data';
 
-const ContactForm = ({ propertyInterest = '', onSuccess }) => {
+const ContactForm = ({ propertyInterest = '', onSuccess, formSource = 'Contact us' }) => {
   const location = useLocation();
   const { slug } = useParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,9 +47,9 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
     }
   };
 
-  // Get UTM parameters (from stored values or URL)
-  const getUTMParams = () => {
-    return getStoredUTMParams();
+  // Get all tracking data (UTM + Referrer + Ad IDs)
+  const getTrackingData = () => {
+    return getAllTrackingData();
   };
 
   // Get page name from pathname
@@ -100,7 +100,7 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
     setIsSubmitting(true);
     setError('');
 
-    const utmParams = getUTMParams();
+    const trackingData = getTrackingData();
     const pageName = getPageName();
 
     // Clean the form data before building payload
@@ -109,11 +109,12 @@ const ContactForm = ({ propertyInterest = '', onSuccess }) => {
     const payload = {
       ...cleanedData,
       form_type: 'contact',
+      form_source: formSource, // User intent: Contact us, etc.
       property_interest: propertyName || undefined, // Only include if not empty
       submitted_at: new Date().toISOString(),
       source_page: window.location.href,
       page_name: pageName,
-      ...cleanPayload(utmParams), // Also clean UTM params
+      ...cleanPayload(trackingData), // Include all tracking data (UTM, referrer, ad IDs)
     };
 
     // Remove undefined property_interest if it's empty

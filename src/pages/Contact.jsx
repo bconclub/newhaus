@@ -80,7 +80,7 @@ const Contact = () => {
               <h2 className="text-3xl font-heading font-bold text-white mb-6">
                 Send us a message
               </h2>
-              <ContactForm />
+              <ContactForm formSource="Contact us" />
             </motion.div>
 
             {/* Contact Information */}

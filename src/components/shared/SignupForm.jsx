@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getStoredUTMParams } from '../../utils/utmTracking';
+import { getAllTrackingData } from '../../utils/utmTracking';
 import Button from './Button';
 
 const STORAGE_KEY = 'newhaus_contact_form_data';
 
-const SignupForm = ({ onSuccess }) => {
+const SignupForm = ({ onSuccess, formSource = 'Sign Up' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,9 +40,9 @@ const SignupForm = ({ onSuccess }) => {
     }
   };
 
-  // Get UTM parameters (from stored values or URL)
-  const getUTMParams = () => {
-    return getStoredUTMParams();
+  // Get all tracking data (UTM + Referrer + Ad IDs)
+  const getTrackingData = () => {
+    return getAllTrackingData();
   };
 
   // Get page name from pathname
@@ -92,7 +92,7 @@ const SignupForm = ({ onSuccess }) => {
     setIsSubmitting(true);
     setError('');
 
-    const utmParams = getUTMParams();
+    const trackingData = getTrackingData();
     const pageName = getPageName();
 
     // Clean the form data before building payload
@@ -103,10 +103,11 @@ const SignupForm = ({ onSuccess }) => {
     const payload = {
       ...cleanedData,
       form_type: 'signup',
+      form_source: formSource, // User intent: Start Exploring, Call Back, Sign Up, etc.
       submitted_at: new Date().toISOString(),
       source_page: window.location.href,
       page_name: pageName,
-      ...cleanPayload(utmParams), // Also clean UTM params
+      ...cleanPayload(trackingData), // Include all tracking data (UTM, referrer, ad IDs)
     };
 
     // Log payload for debugging (remove in production if needed)

@@ -144,7 +144,10 @@ const Properties = () => {
         <p className="text-gray-300 mb-6 text-sm">
           Sign up for unlimited access
         </p>
-        <SignupForm onSuccess={handleFormSuccess} />
+        <SignupForm 
+          formSource="Sign Up"
+          onSuccess={handleFormSuccess} 
+        />
       </Modal>
     </div>
   );

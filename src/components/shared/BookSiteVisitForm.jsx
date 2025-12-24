@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, Clock } from 'lucide-react';
 import { properties } from '../../data/properties';
-import { getStoredUTMParams } from '../../utils/utmTracking';
+import { getAllTrackingData } from '../../utils/utmTracking';
 import Button from './Button';
 
 const STORAGE_KEY = 'newhaus_site_visit_form_data';
 const CONTACT_FORM_STORAGE_KEY = 'newhaus_contact_form_data';
 
-const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
+const BookSiteVisitForm = ({ propertyInterest = '', onSuccess, formSource = 'Book Site Visit' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -73,9 +73,9 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
     }
   };
 
-  // Get UTM parameters
-  const getUTMParams = () => {
-    return getStoredUTMParams();
+  // Get all tracking data (UTM + Referrer + Ad IDs)
+  const getTrackingData = () => {
+    return getAllTrackingData();
   };
 
   // Get page name from pathname
@@ -142,7 +142,7 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
     setIsSubmitting(true);
     setError('');
 
-    const utmParams = getUTMParams();
+    const trackingData = getTrackingData();
     const pageName = getPageName();
 
     // Clean the form data before building payload
@@ -151,11 +151,12 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess }) => {
     const payload = {
       ...cleanedData,
       form_type: 'site_visit_booking',
+      form_source: formSource, // User intent: Book Site Visit, etc.
       property_interest: propertyName || undefined, // Only include if not empty
       submitted_at: new Date().toISOString(),
       source_page: window.location.href,
       page_name: pageName,
-      ...cleanPayload(utmParams), // Also clean UTM params
+      ...cleanPayload(trackingData), // Include all tracking data (UTM, referrer, ad IDs)
     };
 
     // Remove undefined property_interest if it's empty
