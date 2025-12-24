@@ -1,6 +1,8 @@
 import embassyLakeTerracesHero from '../assets/Properties/Embassy Lake Terraces/EMBASSY LAKE TERRACES.webp';
 import embassyGroveHero from '../assets/Properties/Embaasy Grove/Embaasy Grove.jpg';
 import embassyBoulevardHero from '../assets/Properties/Embassy Boulevard/Embassy Boulevard.jpg';
+import embassyOneHero from '../assets/Properties/Embassy One (Four Seasons)/fourseason.webp';
+import embassySpringsHero from '../assets/Properties/Embassy Springs/Embassy Springs.webp';
 
 export const properties = [
   {
@@ -326,7 +328,7 @@ export const properties = [
     price: 'Contact for pricing',
     priceValue: null,
     images: {
-      hero: '/images/properties/four-seasons-hero.jpg',
+      hero: embassyOneHero,
       gallery: [
         '/images/properties/four-seasons-1.jpg',
         '/images/properties/four-seasons-2.jpg',
@@ -446,7 +448,7 @@ export const properties = [
     price: 'Contact for pricing',
     priceValue: null,
     images: {
-      hero: '/images/properties/springs-hero.jpg',
+      hero: embassySpringsHero,
       gallery: [
         '/images/properties/springs-1.jpg',
         '/images/properties/springs-2.jpg',

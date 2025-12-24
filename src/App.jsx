@@ -9,6 +9,8 @@ import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
 import Contact from './pages/Contact';
 import ThankYou from './pages/ThankYou';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 import { initUTMTracking } from './utils/utmTracking';
 
 function AppContent() {
@@ -23,6 +25,18 @@ function AppContent() {
     // Re-initialize UTM tracking when location changes (to capture new UTM params)
     initUTMTracking();
   }, [location]);
+
+  // Check if current route is admin route
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      </Routes>
+    );
+  }
 
   return (
     <Layout>

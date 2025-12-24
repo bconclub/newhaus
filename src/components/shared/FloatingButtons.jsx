@@ -63,6 +63,29 @@ const FloatingButtons = () => {
   const handleWhatsAppClick = () => {
     const whatsappMessage = buildWhatsAppMessage();
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    // Track WhatsApp click
+    const clickData = {
+      page_name: location.pathname,
+      source_page: window.location.href,
+      property_name: propertyName || undefined,
+      referrer: document.referrer || undefined,
+      user_agent: navigator.userAgent,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Send to admin API (non-blocking)
+    fetch('/api/whatsapp-clicks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(clickData),
+    }).catch((err) => {
+      // Silently fail - tracking is secondary
+      console.log('WhatsApp click tracking failed:', err);
+    });
+
     window.open(whatsappUrl, '_blank');
   };
 

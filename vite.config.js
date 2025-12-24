@@ -20,6 +20,18 @@ export default defineConfig({
           });
         },
       },
+      '/api/admin': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/api/leads': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/api/whatsapp-clicks': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     },
   },
 })
