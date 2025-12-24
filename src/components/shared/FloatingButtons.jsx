@@ -61,18 +61,12 @@ const FloatingButtons = () => {
   };
 
   const handleWhatsAppClick = () => {
-    // #region agent log
-    fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'FloatingButtons.jsx:63',message:'WhatsApp button clicked',data:{preloaderInDOM:!!document.querySelector('[class*="z-[9999]"]'),wrapperDiv:document.querySelector('div[class*="pointer-events"]')?.className},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,C'})}).catch(()=>{});
-    // #endregion
     const whatsappMessage = buildWhatsAppMessage();
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleEnquireClick = () => {
-    // #region agent log
-    fetch('http://127.0.0.1:7246/ingest/545b7664-b202-46ed-99da-ac669a646d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'FloatingButtons.jsx:69',message:'Enquire button clicked',data:{preloaderInDOM:!!document.querySelector('[class*="z-[9999]"]'),wrapperDiv:document.querySelector('div[class*="pointer-events"]')?.className},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,C'})}).catch(()=>{});
-    // #endregion
     setIsEnquireModalOpen(true);
   };
 
