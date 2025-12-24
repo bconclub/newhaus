@@ -43,49 +43,49 @@ const ThankYou = () => {
             transition={{ duration: 0.5 }}
             className="max-w-2xl mx-auto text-center"
           >
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-12 h-12 text-green-600" />
-            </div>
+            {/* Animated Checkmark */}
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 15,
+                duration: 0.6
+              }}
+              className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  delay: 0.2,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 10
+                }}
+              >
+                <CheckCircle className="w-12 h-12 text-green-600" />
+              </motion.div>
+            </motion.div>
 
-            <p className="text-xl text-gray-300 mb-8">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="text-xl text-gray-300 mb-8"
+            >
               {getFormMessage()}
-            </p>
+            </motion.p>
 
-            <div className="bg-nh-grey p-8 rounded-lg shadow-md mb-8 border border-nh-copper/20">
-              <h2 className="text-2xl font-heading font-bold text-white mb-4">
-                What happens next?
-              </h2>
-              <div className="text-left space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-nh-copper rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">1</span>
-                  </div>
-                  <p className="text-gray-300">
-                    One of our property curators will review your requirements
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-nh-copper rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">2</span>
-                  </div>
-                  <p className="text-gray-300">
-                    We'll prepare personalized property recommendations
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-nh-copper rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-sm font-bold">3</span>
-                  </div>
-                  <p className="text-gray-300">
-                    We'll reach out to schedule a consultation
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-gray-300 mb-6">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="text-gray-300 mb-6"
+            >
               Continue exploring:
-            </p>
+            </motion.p>
 
             <div className="flex flex-wrap gap-4 justify-center">
               {/* Browser Back Button */}
