@@ -208,23 +208,6 @@ const ContactForm = ({ propertyInterest = '', onSuccess, formSource = 'Contact u
       // Clear saved form data on successful submission
       clearSavedFormData();
 
-      // Also send to admin API for tracking
-      try {
-        await fetch('/api/leads', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }).catch((err) => {
-          // Silently fail - admin tracking is secondary
-          console.log('Admin API tracking failed:', err);
-        });
-      } catch (err) {
-        // Silently fail - admin tracking is secondary
-        console.log('Admin API tracking error:', err);
-      }
-
       // Success - show message on page or call onSuccess callback
       if (onSuccess) {
         onSuccess();
