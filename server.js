@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
@@ -30,8 +31,8 @@ if (!fs.existsSync(DATA_FILE)) {
 }
 
 // Admin credentials
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'Newhaus#826991';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Newhaus#826991';
 
 // Helper function to read data
 const readData = () => {
@@ -60,7 +61,6 @@ app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
 
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    // Generate a simple session token
     const token = crypto.randomBytes(32).toString('hex');
     res.json({ success: true, token });
   } else {
@@ -68,11 +68,9 @@ app.post('/api/admin/login', (req, res) => {
   }
 });
 
-// Verify admin token (simple check - in production use proper JWT)
+// Verify admin token
 app.post('/api/admin/verify', (req, res) => {
   const { token } = req.body;
-  // For simplicity, we'll just check if token exists
-  // In production, use proper JWT verification
   if (token) {
     res.json({ success: true });
   } else {
@@ -90,7 +88,7 @@ app.post('/api/leads', (req, res) => {
 
   const data = readData();
   data.leads.push(leadData);
-  
+
   if (writeData(data)) {
     res.json({ success: true, id: leadData.id });
   } else {
@@ -108,7 +106,7 @@ app.post('/api/whatsapp-clicks', (req, res) => {
 
   const data = readData();
   data.whatsappClicks.push(clickData);
-  
+
   if (writeData(data)) {
     res.json({ success: true, id: clickData.id });
   } else {
@@ -134,19 +132,15 @@ app.get('/api/admin/stats', (req, res) => {
   const leads = data.leads || [];
   const clicks = data.whatsappClicks || [];
 
-  // Group leads by form type
   const leadsByType = leads.reduce((acc, lead) => {
     const type = lead.form_type || 'unknown';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {});
 
-  // Get recent leads (last 7 days)
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   const recentLeads = leads.filter(lead => new Date(lead.timestamp) >= sevenDaysAgo);
-
-  // Get recent clicks (last 7 days)
   const recentClicks = clicks.filter(click => new Date(click.timestamp) >= sevenDaysAgo);
 
   res.json({
@@ -165,5 +159,3 @@ app.get('/api/admin/stats', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Admin API server running on http://localhost:${PORT}`);
 });
-
-

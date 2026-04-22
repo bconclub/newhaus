@@ -210,12 +210,14 @@ All forms include these base fields:
 
 ---
 
-## Data Flow to Google Sheets
+## Data Flow
 
 When forms are submitted:
-1. Data is sent to webhook: `https://build.goproxe.com/webhook/newhaus-website`
-2. Webhook receives complete payload with all fields listed above
-3. Webhook can then push this data to Google Sheets for analysis
-4. All tracking data (UTM, ad IDs, referrer) is included for campaign analysis
+1. The frontend sends the payload directly to a **Google Apps Script Web App** (`mode: 'no-cors'`)
+2. The Apps Script appends the lead to the **"Website"** tab in the Google Sheet
+3. The form assumes success if the network request completes
+4. All tracking data (UTM, ad IDs, referrer) is included in the payload for analysis
+
+See `GOOGLE_SHEETS_SETUP.md` for setup instructions.
 
 

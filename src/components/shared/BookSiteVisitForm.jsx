@@ -4,6 +4,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, Clock } from 'lucide-react';
 import { properties } from '../../data/properties';
 import { getAllTrackingData } from '../../utils/utmTracking';
+
 import Button from './Button';
 
 const STORAGE_KEY = 'newhaus_site_visit_form_data';
@@ -168,31 +169,32 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess, formSource = 'Boo
     console.log('Submitting form with payload:', payload);
 
     try {
-      // Webhook URL - use environment variable, proxy in dev, or default to production webhook
-      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || 
-        (import.meta.env.DEV 
-          ? '/api/webhook' 
-          : 'https://build.goproxe.com/webhook/newhaus-website');
+      // Google Apps Script Web App URL
+      const appsScriptUrl = import.meta.env.VITE_GOOGLE_SHEETS_URL;
+
+      if (!appsScriptUrl) {
+        throw new Error('Google Sheets URL is not configured. Please contact support.');
+      }
 
       // Create AbortController for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-      const response = await fetch(webhookUrl, {
+      await fetch(appsScriptUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
-        mode: 'cors', // Explicitly set CORS mode
+        mode: 'no-cors',
       }).catch((fetchError) => {
         // Clear timeout if fetch fails before response
         clearTimeout(timeoutId);
         // Re-throw with more context
         console.error('Fetch error details:', {
           error: fetchError,
-          webhookUrl,
+          appsScriptUrl,
           message: fetchError.message,
         });
         throw fetchError;
@@ -200,52 +202,8 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess, formSource = 'Boo
 
       clearTimeout(timeoutId);
 
-      // Read response body - read as text first to avoid "body stream already read" error
-      let responseData;
-      const textResponse = await response.text();
-      try {
-        responseData = JSON.parse(textResponse);
-        console.log('Webhook response:', responseData);
-      } catch (parseError) {
-        // If response is not JSON, check if it's HTML
-        if (textResponse.trim().startsWith('<!DOCTYPE') || textResponse.trim().startsWith('<html')) {
-          // Extract error message from HTML if possible
-          const errorMatch = textResponse.match(/<pre[^>]*>([^<]+)<\/pre>/i) || 
-                            textResponse.match(/<title[^>]*>([^<]+)<\/title>/i);
-          const htmlError = errorMatch ? errorMatch[1].trim() : 'Internal Server Error';
-          console.log('Webhook response (HTML error):', htmlError);
-          responseData = { message: htmlError, isHtml: true };
-        } else {
-          // Plain text response
-          console.log('Webhook response (text):', textResponse);
-          responseData = { message: textResponse };
-        }
-      }
-
-      if (!response.ok) {
-        console.error('Webhook error:', {
-          status: response.status,
-          statusText: response.statusText,
-          headers: Object.fromEntries(response.headers.entries()),
-          responseData: responseData,
-          payload: payload,
-          webhookUrl: webhookUrl
-        });
-        
-        // Extract a clean error message
-        let errorMessage = 'Internal Server Error';
-        if (responseData?.message && !responseData.isHtml) {
-          errorMessage = responseData.message;
-        } else if (responseData?.error) {
-          errorMessage = responseData.error;
-        } else if (response.status === 500) {
-          errorMessage = 'Server error. Please try again later or contact us directly.';
-        } else {
-          errorMessage = response.statusText || 'Unknown error';
-        }
-        
-        throw new Error(`Submission failed: ${response.status} ${errorMessage}`);
-      }
+      // With mode: 'no-cors', the response is opaque.
+      // We assume success if the fetch completed without throwing.
 
       // Clear saved form data on successful submission
       clearSavedFormData();
@@ -263,21 +221,15 @@ const BookSiteVisitForm = ({ propertyInterest = '', onSuccess, formSource = 'Boo
         name: err.name,
         message: err.message,
         stack: err.stack,
-        webhookUrl: import.meta.env.VITE_WEBHOOK_URL || 
-          (import.meta.env.DEV 
-            ? '/api/webhook' 
-            : 'https://build.goproxe.com/webhook/newhaus-website')
+        appsScriptUrl: import.meta.env.VITE_GOOGLE_SHEETS_URL,
       });
-      
+
       // Check for different error types
       if (err.name === 'AbortError') {
         setError('Request timed out. Please check your connection and try again, or call us at +91 96320 04011');
       } else if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('Failed to fetch'))) {
         // More specific network error handling
         setError('Network error. Please check your connection and try again, or call us at +91 96320 04011');
-      } else if (err.message && err.message.includes('Submission failed')) {
-        // Server returned an error status
-        setError(`Unable to submit. ${err.message}. Please try again or call us at +91 96320 04011`);
       } else {
         setError('Unable to submit. Please try again or call us at +91 96320 04011');
       }
